@@ -1,4 +1,17 @@
 @import "tailwindcss";
 
+/* GameStreet design tokens: use as bg-night, text-pink, border-purple, etc. */
+@theme {
+  --color-night: #0b0d1a;
+  --color-surface: #1c2033;
+  --color-purple: #8549ff;
+  --color-pink: #ff65c8;
+  --color-yellow: #ffd02b;
+  --color-mint: #4ee7e0;
+  --color-offwhite: #f7f5fa;
+}
 
-
+body {
+  background: var(--color-night);
+  color: var(--color-offwhite);
+}
