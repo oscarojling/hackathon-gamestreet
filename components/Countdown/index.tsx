@@ -10,7 +10,7 @@ type Props = {
 
 function AlarmMarks({ flip }: { flip?: boolean }) {
   return (
-    <svg aria-hidden="true" viewBox="0 0 12 24" className={`h-10 w-5 text-pink ${flip ? "-scale-x-100" : ""}`}>
+    <svg aria-hidden="true" viewBox="0 0 12 24" className={`h-10 w-5 text-red ${flip ? "-scale-x-100" : ""}`}>
       <g stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
         <path d="M10 5 4 2" />
         <path d="M10 12H2" />
@@ -27,7 +27,7 @@ export default function Countdown({ remainingMs, totalMs, endsAt, warning }: Pro
   return (
     <div
       className={`rounded-2xl border bg-surface px-5 py-5 text-center ${
-        warning ? "border-pink/60 shadow-[0_0_28px_color-mix(in_srgb,var(--color-pink)_45%,transparent)]" : "border-offwhite/10"
+        warning ? "border-red/60 shadow-[0_0_28px_color-mix(in_srgb,var(--color-red)_45%,transparent)]" : "border-offwhite/10"
       }`}
     >
       <p className="font-display text-[11px] tracking-[0.2em] text-lilac uppercase">Time left</p>
@@ -35,7 +35,7 @@ export default function Countdown({ remainingMs, totalMs, endsAt, warning }: Pro
         {warning && <AlarmMarks />}
         <p
           role="timer"
-          className={`font-display text-7xl leading-none tabular-nums ${warning ? "text-pink text-outline" : ""}`}
+          className={`font-display text-7xl leading-none tabular-nums ${warning ? "text-red text-outline" : ""}`}
         >
           {formatDuration(remainingMs)}
         </p>
@@ -43,7 +43,7 @@ export default function Countdown({ remainingMs, totalMs, endsAt, warning }: Pro
       </div>
       <div className="mx-auto mt-3 h-2.5 w-5/6 overflow-hidden rounded-full bg-night">
         <div
-          className={`h-full rounded-full transition-[width] duration-1000 ease-linear ${warning ? "bg-pink" : "bg-purple"}`}
+          className={`h-full rounded-full transition-[width] duration-1000 ease-linear ${warning ? "bg-red" : "bg-purple"}`}
           style={{ width: `${progress * 100}%` }}
         />
       </div>

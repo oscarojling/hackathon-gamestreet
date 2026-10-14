@@ -11,20 +11,15 @@ type Props = {
   children: ReactNode;
 };
 
-const CORNER = ["..P", ".PP", "PP."]; // pixel corner decoration
+const CORNER = ["P..", ".PK", "..P"]; // pixel staircase
 
 function PixelCorner({ flip }: { flip?: boolean }) {
   return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 3 3"
-      shapeRendering="crispEdges"
-      className={`pointer-events-none absolute bottom-2 size-6 ${flip ? "right-2 -scale-x-100" : "left-2"}`}
-    >
+    <svg aria-hidden="true" viewBox="0 0 3 3" shapeRendering="crispEdges" className={`size-6 shrink-0 ${flip ? "-scale-x-100" : ""}`}>
       {CORNER.flatMap((row, y) =>
         [...row].map((c, x) =>
-          c === "P" ? (
-            <rect key={`${x}-${y}`} x={x} y={y} width={1} height={1} fill={(x + y) % 2 ? "var(--color-pink)" : "var(--color-purple)"} />
+          c !== "." ? (
+            <rect key={`${x}-${y}`} x={x} y={y} width={1} height={1} fill={c === "K" ? "var(--color-pink)" : "var(--color-purple)"} />
           ) : null,
         ),
       )}
@@ -32,17 +27,21 @@ function PixelCorner({ flip }: { flip?: boolean }) {
   );
 }
 
-// Shared frame for every phone screen: header, content, footer
+// Shared frame for every phone screen: header, content, "Eat · Drink · GS1 · Play · Repeat" footer
 export default function PhoneScreen({ station, status, statusNote, onBack, children }: Props) {
   return (
-    <section className="relative flex min-h-dvh flex-col gap-5 p-5 pb-4">
+    <section className="flex min-h-dvh flex-col gap-5 p-5 pb-3">
       <PhoneHeader station={station} status={status} statusNote={statusNote} onBack={onBack} />
       {children}
-      <footer className="mt-2 flex justify-center">
-        <GsBadge className="size-14" />
+      <footer className="mt-auto flex items-end justify-between pt-2">
+        <PixelCorner />
+        <span className="flex items-center gap-3 font-display text-[11px] tracking-[0.2em] text-offwhite/60">
+          <span>EAT · DRINK</span>
+          <GsBadge className="size-10" />
+          <span>PLAY · REPEAT</span>
+        </span>
+        <PixelCorner flip />
       </footer>
-      <PixelCorner />
-      <PixelCorner flip />
     </section>
   );
 }

@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
+import { resetAllSessions } from "@/lib/session";
 import Logo from "@/components/Logo";
 import Icon from "@/components/Icon";
 
@@ -9,12 +11,15 @@ const PHONE = "/play/07";
 
 // Opens the phone flow in a phone-sized window and the PC screen in this tab.
 // Same browser → paying on the "phone" unlocks the "PC" live.
+// Always starts fresh: any old session is cleared first.
 function startLiveDemo() {
+  resetAllSessions();
   window.open(PHONE, "gamestreet-phone", "width=420,height=880,left=40,top=40");
   window.location.href = STATION;
 }
 
 export default function DemoStart() {
+  const [cleared, setCleared] = useState(false);
   return (
     <main className="mx-auto flex min-h-dvh max-w-5xl flex-col items-center justify-center gap-10 px-6 py-12 text-center">
       <div className="animate-screen-in flex flex-col items-center gap-4">
@@ -65,9 +70,20 @@ export default function DemoStart() {
         </Link>
       </div>
 
+      <button
+        onClick={() => {
+          resetAllSessions();
+          setCleared(true);
+        }}
+        className="flex items-center gap-2 rounded-xl border-2 border-offwhite/20 px-5 py-2.5 font-display text-sm tracking-wide uppercase transition hover:border-purple hover:text-purple"
+      >
+        <Icon name="refresh" className="size-4" />
+        {cleared ? "Demo reset ✓" : "Reset demo"}
+      </button>
+
       <p className="text-xs opacity-50">
         Live demo opens the phone in its own window. Allow pop-ups if nothing happens. PC shortcuts: P = pay ·
-        T = +30 min · G = games · E = end
+        T = +30 min · G = games · E = end · F = fast-forward · R = reset
       </p>
     </main>
   );

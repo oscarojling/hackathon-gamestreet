@@ -6,7 +6,6 @@ import PhoneScreen from "@/components/PhoneScreen";
 import ScreenTitle from "@/components/ScreenTitle";
 import Button from "@/components/Button";
 import Icon from "@/components/Icon";
-import Banner from "@/components/Banner";
 import Alert from "@/components/Alert";
 import PayBadge from "@/components/PayBadge";
 import PaymentOverlay from "@/components/PaymentOverlay";
@@ -23,13 +22,15 @@ export const METHODS: { id: PayMethod; label: string; sub: string }[] = [
 type Props = {
   station: Station;
   option: PlaytimeOption;
+  mode?: "start" | "extend"; // M2 first payment, or paying for extra time
+  initialMethod?: PayMethod;
   onBack: () => void;
   onPaid: (method: PayMethod) => void;
 };
 
 // M2: choose payment method + fake payment
-export default function Checkout({ station, option, onBack, onPaid }: Props) {
-  const [method, setMethod] = useState<PayMethod>("swish");
+export default function Checkout({ station, option, mode = "start", initialMethod = "swish", onBack, onPaid }: Props) {
+  const [method, setMethod] = useState<PayMethod>(initialMethod);
   const [status, setStatus] = useState<Status>("idle");
   const attempts = useRef(0);
 
@@ -53,7 +54,7 @@ export default function Checkout({ station, option, onBack, onPaid }: Props) {
   const processing = status === "processing" || status === "paid";
 
   return (
-    <PhoneScreen station={station} status="available" onBack={processing ? undefined : onBack}>
+    <PhoneScreen station={station} status={mode === "start" ? "available" : "active"} onBack={processing ? undefined : onBack}>
       <ScreenTitle kicker="Payment" sub="How would you like to pay?">
         Choose
         <br />
@@ -66,8 +67,11 @@ export default function Checkout({ station, option, onBack, onPaid }: Props) {
         <div className="flex items-center gap-3 pr-3">
           <Icon name="clock" className="size-6 text-purple" />
           <div>
-            <dt className="text-[10px] tracking-wider text-lilac uppercase">Playtime</dt>
-            <dd className="font-display text-lg">{option.minutes} MIN</dd>
+            <dt className="text-[10px] tracking-wider text-lilac uppercase">{mode === "start" ? "Playtime" : "Extra time"}</dt>
+            <dd className="font-display text-lg">
+              {mode === "extend" && "+"}
+              {option.minutes} MIN
+            </dd>
           </div>
         </div>
         <div className="flex items-center gap-3 pl-4">
@@ -128,7 +132,9 @@ export default function Checkout({ station, option, onBack, onPaid }: Props) {
         <Button onClick={pay} loading={processing} loadingText="Paying…">
           {status === "failed" ? "Try again" : `Pay ${option.price} kr`}
         </Button>
-        <Banner icon="lock" title="Secure payment via Stripe." sub="Your data is protected." />
+        <p className="flex items-center justify-center gap-1.5 text-xs text-offwhite/60">
+          <Icon name="lock" className="size-3.5" /> Secure payment via Stripe.
+        </p>
       </div>
     </PhoneScreen>
   );

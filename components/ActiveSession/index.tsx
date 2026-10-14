@@ -3,28 +3,27 @@
 import { useEffect } from "react";
 import { formatClock, minuteMs, type Session } from "@/lib/session";
 import { useNow } from "@/lib/useNow";
+import { URGENT_MINUTES } from "@/lib/thresholds";
 import type { Station } from "@/types";
 import PhoneScreen from "@/components/PhoneScreen";
 import ScreenTitle from "@/components/ScreenTitle";
 import Countdown from "@/components/Countdown";
 import InfoRows from "@/components/InfoRows";
 import Button from "@/components/Button";
-
-import { LOW_MINUTES, URGENT_MINUTES } from "@/lib/thresholds";
-import Alert from "@/components/Alert";
+import Icon from "@/components/Icon";
 
 type Props = {
   station: Station;
   session: Session;
+  addedMinutes?: number; // shows "+30 min added" after an extension
   onAddTime: () => void;
   onEnd: () => void; // "End session" or time ran out
 };
 
-// M4: "Your session" with live countdown (turns pink in the last 10 min)
-export default function ActiveSession({ station, session, onAddTime, onEnd }: Props) {
+// M4: "Your session" with live countdown (turns red in the last 5 min)
+export default function ActiveSession({ station, session, addedMinutes, onAddTime, onEnd }: Props) {
   const now = useNow();
   const remaining = session.endsAt - now;
-  const low = remaining <= LOW_MINUTES * minuteMs();
   const urgent = remaining <= URGENT_MINUTES * minuteMs();
 
   useEffect(() => {
@@ -33,13 +32,7 @@ export default function ActiveSession({ station, session, onAddTime, onEnd }: Pr
 
   return (
     <PhoneScreen station={station} status="active">
-      {low ? (
-        <Alert tone="warning" title={`${Math.max(1, Math.ceil(remaining / minuteMs()))} min left!`} sub="Want to keep playing?">
-          <Button onClick={onAddTime} icon="plus" arrow={false} className="!py-3 !text-base">
-            Add time
-          </Button>
-        </Alert>
-      ) : (
+      {!urgent && (
         <ScreenTitle>
           Your
           <br />
@@ -47,12 +40,21 @@ export default function ActiveSession({ station, session, onAddTime, onEnd }: Pr
         </ScreenTitle>
       )}
 
-      <Countdown
-        remainingMs={remaining}
-        totalMs={session.endsAt - session.startedAt}
-        endsAt={session.endsAt}
-        warning={urgent}
-      />
+      <div className="flex flex-col gap-2">
+        {addedMinutes ? (
+          <p className="text-center font-display text-sm tracking-wide text-green uppercase">
+            + {addedMinutes} min added
+          </p>
+        ) : null}
+        <Countdown
+          remainingMs={remaining}
+          totalMs={session.endsAt - session.startedAt}
+          endsAt={session.endsAt}
+          warning={urgent}
+        />
+      </div>
+
+      {urgent && <p className="-mb-2 text-center text-offwhite/85">Want to keep playing?</p>}
 
       <Button onClick={onAddTime} icon="plus">
         Add more time
@@ -62,13 +64,18 @@ export default function ActiveSession({ station, session, onAddTime, onEnd }: Pr
         title="Session details"
         rows={[
           { icon: "clock", label: "Purchased time", value: `${session.totalMinutes} min` },
-          { icon: "coins", label: "Amount paid", value: `${session.totalPaid} kr` },
+          { icon: "card", label: "Amount paid", value: `${session.totalPaid} kr` },
           { icon: "calendar", label: "Session ends at", value: formatClock(session.endsAt) },
         ]}
       >
-        <Button variant="destructive" icon="logout" onClick={onEnd} className="normal-case">
-          End session
-        </Button>
+        <button
+          onClick={onEnd}
+          className="flex items-center gap-3 rounded-xl border-2 border-red px-4 py-3 text-red transition hover:bg-red hover:text-offwhite"
+        >
+          <Icon name="logout" className="size-5" />
+          <span className="flex-1 text-left font-display tracking-wide">End session</span>
+          <Icon name="chevron" className="size-5" />
+        </button>
       </InfoRows>
     </PhoneScreen>
   );

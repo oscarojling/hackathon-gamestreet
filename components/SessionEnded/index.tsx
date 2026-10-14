@@ -36,7 +36,7 @@ export default function SessionEnded({ station, summary, onPlayAgain }: Props) {
           <SpeedMarks className="size-8" direction="right" />
         </div>
         <h1 className="mt-3 -rotate-3 font-display text-[44px] leading-[0.88] uppercase text-outline [text-shadow:0_5px_0_var(--color-purple)]">
-          <span className="text-yellow">Session</span>
+          <span className="text-offwhite">Session</span>
           <br />
           <span className="text-pink">ended!</span>
         </h1>

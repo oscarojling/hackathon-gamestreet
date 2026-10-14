@@ -85,3 +85,39 @@ export const isActive = (s: Session | null) => !!s && s.endsAt > Date.now();
 
 export const formatClock = (ms: number) =>
   new Date(ms).toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit" });
+
+// Demo helper: wipe every stored session (all stations) and tell open tabs.
+export function resetAllSessions() {
+  try {
+    Object.keys(localStorage)
+      .filter((k) => k.startsWith("gs-session-"))
+      .forEach((k) => {
+        localStorage.removeItem(k);
+        broadcast(k.replace("gs-session-", ""), null);
+      });
+  } catch {
+    // storage unavailable – nothing to clear
+  }
+}
+
+// If the URL has ?reset, clear everything once and remove the flag from the URL.
+// Returns true when a reset happened.
+export function resetFromUrl(): boolean {
+  const url = new URL(window.location.href);
+  if (!url.searchParams.has("reset")) return false;
+  resetAllSessions();
+  url.searchParams.delete("reset");
+  window.history.replaceState(null, "", url.toString());
+  return true;
+}
+
+// Demo helper: jump the clock so the session has `msLeft` remaining.
+// Shifts startedAt too, so progress bars still match the purchased time. Syncs open tabs.
+export function setRemaining(code: string, msLeft: number): Session | null {
+  const current = getSession(code);
+  if (!current) return null;
+  const endsAt = Date.now() + msLeft;
+  const session: Session = { ...current, endsAt, startedAt: endsAt - current.totalMinutes * minuteMs() };
+  save(session);
+  return session;
+}
