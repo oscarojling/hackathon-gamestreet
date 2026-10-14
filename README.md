@@ -1,12 +1,12 @@
 # GameStreet – Scan. Pay. Play.
 
-## ▶️ Live demo: **[gamestreet-mobile.vercel.app/demo](https://gamestreet-mobile.vercel.app/demo)**
+## ▶️ Live demo: **[gamestreet-mobile.vercel.app/live](https://gamestreet-mobile.vercel.app/live)**
 
-Click **Start live demo**: the phone opens in a small window and the PC screen in your tab. Pay on the phone and watch the PC unlock.
+The PC screen and the customer's phone side by side in one window, synced live. Pay on the phone and watch the PC unlock.
 
 | | Link |
 |---|---|
-| ▶️ Live demo (phone + PC, synced) | **[gamestreet-mobile.vercel.app/demo](https://gamestreet-mobile.vercel.app/demo)** |
+| ▶️ Live demo (phone + PC, synced) | **[gamestreet-mobile.vercel.app/live](https://gamestreet-mobile.vercel.app/live)** |
 | 🖥️ PC screen (gaming station) | [gamestreet-desktop.vercel.app](https://gamestreet-desktop.vercel.app/station/07) |
 | 📱 Phone (scan & pay) | [gamestreet-mobile.vercel.app](https://gamestreet-mobile.vercel.app/play/07) |
 
@@ -39,14 +39,14 @@ Game on? (QR) → Ready to play? (dashboard) → In-game timer overlay with add-
 
 ## How to demo
 
-1. Open **[/demo](https://gamestreet-mobile.vercel.app/demo)** (or `localhost:3000` when running locally).
-2. Click **Start live demo**. It clears old sessions, opens the phone (`/play/07`) in a phone-sized pop-up and the PC screen (`/station/07`) in the current tab. Allow pop-ups if nothing opens.
-3. Put the windows side by side and share your **entire screen** in the call.
+1. Open **[/live](https://gamestreet-mobile.vercel.app/live)** (or `localhost:3000/live` locally). It always starts fresh.
+2. The PC screen is on the left and the phone on the right. Use the control bar at the top, or the keyboard shortcuts below.
+3. In the call, share just this browser tab.
 4. Pay on the phone → the PC unlocks. Everything you do on one side updates the other within a second.
 
 Why the mobile site? Phone and PC sync through the browser (`localStorage` + `BroadcastChannel`), which only works when both pages are on the **same site**. The separate desktop and mobile deployments can't talk to each other without a backend.
 
-**Keyboard shortcuts** (click the PC window first):
+**Keyboard shortcuts** (work anywhere on `/live`):
 
 | Key | Does |
 |---|---|
@@ -77,7 +77,8 @@ There is also a small **⏩ Fast-forward** panel in the bottom-left corner of th
 ```
 app/
   page.tsx               start page (redirects on Vercel via NEXT_PUBLIC_APP)
-  demo/                  demo start page with "Start live demo" (never redirects)
+  demo/                  demo start page (never redirects)
+  live/                  PC + phone side by side in one window, synced
   play/[code]/           phone flow
   station/[code]/        PC screen
 components/              one folder per component: Name/index.tsx
