@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import type { Station } from "@/types";
 import PhoneHeader, { type StationStatus } from "@/components/PhoneHeader";
+import GsBadge from "@/components/GsBadge";
 
 type Props = {
   station: Station;
@@ -10,22 +11,40 @@ type Props = {
   children: ReactNode;
 };
 
+const CORNER = ["..P", ".PP", "PP."]; // pixel corner decoration
+
+function PixelCorner({ flip }: { flip?: boolean }) {
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 3 3"
+      shapeRendering="crispEdges"
+      className={`pointer-events-none absolute bottom-2 size-6 ${flip ? "right-2 -scale-x-100" : "left-2"}`}
+    >
+      {CORNER.flatMap((row, y) =>
+        [...row].map((c, x) =>
+          c === "P" ? (
+            <rect key={`${x}-${y}`} x={x} y={y} width={1} height={1} fill={(x + y) % 2 ? "var(--color-pink)" : "var(--color-purple)"} />
+          ) : null,
+        ),
+      )}
+    </svg>
+  );
+}
+
 // Shared frame for every phone screen: header, content, footer
 export default function PhoneScreen({ station, status, statusNote, onBack, children }: Props) {
   return (
-    <section className="relative flex min-h-dvh flex-col gap-5 p-5 pb-3">
+    <section className="relative flex min-h-dvh flex-col gap-5 p-5 pb-4">
       <PhoneHeader station={station} status={status} statusNote={statusNote} onBack={onBack} />
       {children}
-      <footer className="mt-2 flex items-center justify-center gap-3 text-[10px] font-bold tracking-[0.25em] opacity-50">
+      <footer className="mt-2 flex items-center justify-center gap-3 font-display text-[11px] tracking-[0.25em] text-offwhite/50">
         <span>EAT · DRINK</span>
-        <span className="grid size-6 place-items-center rounded-full border border-pink text-[8px] text-pink">GS</span>
+        <GsBadge className="size-7" />
         <span>PLAY · REPEAT</span>
       </footer>
-      {/* Pixel corners */}
-      <span aria-hidden="true" className="pointer-events-none absolute bottom-0 left-0 size-3 bg-purple" />
-      <span aria-hidden="true" className="pointer-events-none absolute bottom-3 left-3 size-2 bg-pink" />
-      <span aria-hidden="true" className="pointer-events-none absolute right-0 bottom-0 size-3 bg-purple" />
-      <span aria-hidden="true" className="pointer-events-none absolute right-3 bottom-3 size-2 bg-pink" />
+      <PixelCorner />
+      <PixelCorner flip />
     </section>
   );
 }

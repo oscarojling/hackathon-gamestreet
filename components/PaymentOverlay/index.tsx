@@ -1,5 +1,6 @@
 import type { PayMethod } from "@/components/Checkout";
 import Icon from "@/components/Icon";
+import PayBadge from "@/components/PayBadge";
 
 type Props = {
   method: PayMethod;
@@ -28,13 +29,13 @@ export default function PaymentOverlay({ method, amount, phase }: Props) {
           <>
             <span className="relative mx-auto grid size-20 place-items-center">
               <span className="absolute inset-0 animate-ping rounded-full bg-purple/40" />
-              <span className="relative grid size-20 place-items-center rounded-full bg-purple text-2xl font-black">
-                {method === "swish" ? "S" : method === "card" ? <Icon name="card" className="size-9" /> : "Pay"}
+              <span className="relative grid size-20 place-items-center rounded-full bg-purple">
+                <PayBadge method={method} className="size-12" />
               </span>
             </span>
-            <p className="mt-6 text-2xl font-black uppercase">{copy.title}</p>
+            <p className="mt-6 font-display text-3xl uppercase">{copy.title}</p>
             <p className="mt-1 text-sm text-lilac">{copy.sub}</p>
-            <p className="mt-6 text-4xl font-black">{amount} kr</p>
+            <p className="mt-6 font-display text-5xl">{amount} kr</p>
             <span className="mx-auto mt-6 block size-6 animate-spin rounded-full border-2 border-offwhite/20 border-t-yellow" />
           </>
         ) : (
@@ -42,7 +43,7 @@ export default function PaymentOverlay({ method, amount, phase }: Props) {
             <span className="animate-pop mx-auto grid size-20 place-items-center rounded-full bg-green text-night shadow-[0_0_30px_var(--color-green)]">
               <Icon name="check" className="size-10" />
             </span>
-            <p className="mt-6 text-2xl font-black uppercase">Paid!</p>
+            <p className="mt-6 font-display text-3xl uppercase">Paid!</p>
             <p className="mt-1 text-sm text-lilac">{amount} kr</p>
           </>
         )}

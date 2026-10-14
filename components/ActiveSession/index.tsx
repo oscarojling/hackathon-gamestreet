@@ -9,7 +9,6 @@ import ScreenTitle from "@/components/ScreenTitle";
 import Countdown from "@/components/Countdown";
 import InfoRows from "@/components/InfoRows";
 import Button from "@/components/Button";
-import Icon from "@/components/Icon";
 
 const WARNING_MINUTES = 10;
 
@@ -47,29 +46,24 @@ export default function ActiveSession({ station, session, onAddTime, onEnd }: Pr
         warning={warning}
       />
 
-      {warning && <p className="-mt-2 text-center text-sm text-pink">Want to keep playing?</p>}
+      {warning && <p className="-mt-2 text-center font-display text-lg text-pink">Want to keep playing?</p>}
 
-      <Button onClick={onAddTime}>
-        <Icon name="plus" className="size-4" /> Add more time
+      <Button onClick={onAddTime} icon="plus">
+        Add more time
       </Button>
 
       <InfoRows
         title="Session details"
         rows={[
           { icon: "clock", label: "Purchased time", value: `${session.totalMinutes} min` },
-          { icon: "card", label: "Amount paid", value: `${session.totalPaid} kr` },
-          { icon: "clock", label: "Session ends at", value: formatClock(session.endsAt) },
+          { icon: "coins", label: "Amount paid", value: `${session.totalPaid} kr` },
+          { icon: "receipt", label: "Session ends at", value: formatClock(session.endsAt) },
         ]}
-      />
-
-      <button
-        onClick={onEnd}
-        className="mt-auto flex items-center gap-3 rounded-2xl border-2 border-red/60 px-4 py-3 text-sm font-bold text-red"
       >
-        <Icon name="logout" className="size-4" />
-        <span className="flex-1 text-left">End session</span>
-        <Icon name="chevron" className="size-4" />
-      </button>
+        <Button variant="destructive" icon="logout" onClick={onEnd} className="normal-case">
+          End session
+        </Button>
+      </InfoRows>
     </PhoneScreen>
   );
 }

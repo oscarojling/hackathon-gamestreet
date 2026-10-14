@@ -6,6 +6,8 @@ import PhoneScreen from "@/components/PhoneScreen";
 import ScreenTitle from "@/components/ScreenTitle";
 import Button from "@/components/Button";
 import Icon from "@/components/Icon";
+import Banner from "@/components/Banner";
+import PayBadge from "@/components/PayBadge";
 import PaymentOverlay from "@/components/PaymentOverlay";
 
 export type PayMethod = "swish" | "card" | "applepay";
@@ -16,19 +18,6 @@ export const METHODS: { id: PayMethod; label: string; sub: string }[] = [
   { id: "card", label: "Card payment", sub: "Visa, Mastercard" },
   { id: "applepay", label: "Apple Pay", sub: "Pay with Apple Pay" },
 ];
-
-function MethodBadge({ id }: { id: PayMethod }) {
-  if (id === "card") return <Icon name="card" className="size-6" />;
-  return (
-    <span
-      className={`grid size-7 place-items-center rounded-lg text-[10px] font-black ${
-        id === "swish" ? "bg-offwhite text-purple" : "bg-offwhite text-night"
-      }`}
-    >
-      {id === "swish" ? "S" : "Pay"}
-    </span>
-  );
-}
 
 type Props = {
   station: Station;
@@ -74,38 +63,38 @@ export default function Checkout({ station, option, onBack, onPaid }: Props) {
 
       <dl className="grid grid-cols-2 divide-x divide-offwhite/10 rounded-2xl border border-offwhite/10 bg-surface p-4">
         <div className="flex items-center gap-3 pr-3">
-          <Icon name="clock" className="size-5 opacity-70" />
+          <Icon name="clock" className="size-6 text-purple" />
           <div>
-            <dt className="text-[10px] uppercase opacity-60">Playtime</dt>
-            <dd className="font-black">{option.minutes} MIN</dd>
+            <dt className="text-[10px] tracking-wider text-lilac uppercase">Playtime</dt>
+            <dd className="font-display text-lg">{option.minutes} MIN</dd>
           </div>
         </div>
         <div className="flex items-center gap-3 pl-4">
-          <Icon name="card" className="size-5 opacity-70" />
+          <Icon name="coins" className="size-6 text-purple" />
           <div>
-            <dt className="text-[10px] uppercase opacity-60">Total</dt>
-            <dd className="font-black">{option.price} KR</dd>
+            <dt className="text-[10px] tracking-wider text-lilac uppercase">Total</dt>
+            <dd className="font-display text-lg">{option.price} KR</dd>
           </div>
         </div>
       </dl>
 
-      <fieldset className="flex flex-col gap-2.5" disabled={processing}>
+      <fieldset className="flex flex-col gap-2" disabled={processing}>
         <legend className="sr-only">Payment method</legend>
         {METHODS.map((m) => {
           const selected = m.id === method;
           return (
             <label
               key={m.id}
-              className={`flex cursor-pointer items-center gap-3 rounded-2xl border-2 px-4 py-3 transition ${
+              className={`flex items-center gap-3 rounded-2xl border-2 px-3 py-2.5 transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-yellow ${
                 selected
                   ? "border-purple bg-purple shadow-[0_0_20px_var(--color-purple)]"
                   : "border-offwhite/10 bg-surface hover:border-offwhite/30"
               }`}
             >
-              <MethodBadge id={m.id} />
+              <PayBadge method={m.id} />
               <span className="flex-1">
-                <span className="block font-bold">{m.label}</span>
-                <span className="block text-xs opacity-70">{m.sub}</span>
+                <span className="block font-display text-lg leading-tight">{m.label}</span>
+                <span className="block text-xs opacity-75">{m.sub}</span>
               </span>
               <input
                 type="radio"
@@ -113,44 +102,32 @@ export default function Checkout({ station, option, onBack, onPaid }: Props) {
                 value={m.id}
                 checked={selected}
                 onChange={() => setMethod(m.id)}
-                className="peer sr-only"
+                className="sr-only"
               />
               <span
                 aria-hidden="true"
-                className={`grid size-5 place-items-center rounded-full border-2 ${
+                className={`grid size-7 place-items-center rounded-full border-2 ${
                   selected ? "border-offwhite bg-offwhite text-purple" : "border-offwhite/40"
-                } peer-focus-visible:ring-2 peer-focus-visible:ring-yellow`}
+                }`}
               >
-                {selected && <Icon name="check" className="size-3" />}
+                {selected && <Icon name="check" className="size-4" />}
               </span>
             </label>
           );
         })}
       </fieldset>
 
-      {status === "failed" && (
-        <p role="alert" className="rounded-2xl border-2 border-red p-4 text-sm text-red">
-          Payment failed. Try again or pick another method.
-        </p>
-      )}
+      {status === "failed" && <Banner icon="warning" title="Payment failed." sub="Try again or pick another method." />}
 
       {processing && (
         <PaymentOverlay method={method} amount={option.price} phase={status === "paid" ? "done" : "waiting"} />
       )}
 
-      <div className="mt-auto flex flex-col gap-2">
-        <Button onClick={pay} disabled={processing} arrow={!processing}>
-          {processing
-            ? method === "swish"
-              ? "Waiting for Swish…"
-              : "Processing…"
-            : status === "failed"
-              ? "Try again"
-              : `Pay ${option.price} kr`}
+      <div className="mt-auto flex flex-col gap-3">
+        <Button onClick={pay} loading={processing} loadingText="Paying…">
+          {status === "failed" ? "Try again" : `Pay ${option.price} kr`}
         </Button>
-        <p className="flex items-center justify-center gap-1.5 text-xs opacity-60">
-          <Icon name="lock" className="size-3" /> Secure payment via Stripe.
-        </p>
+        <Banner icon="lock" title="Secure payment via Stripe." sub="Your data is protected." />
       </div>
     </PhoneScreen>
   );
