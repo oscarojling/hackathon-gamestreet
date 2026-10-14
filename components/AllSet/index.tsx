@@ -1,7 +1,9 @@
 import type { Session } from "@/lib/session";
-import { formatClock } from "@/lib/session";
 import type { Station } from "@/types";
-import PhoneHeader from "@/components/PhoneHeader";
+import PhoneScreen from "@/components/PhoneScreen";
+import ScreenTitle from "@/components/ScreenTitle";
+import Button from "@/components/Button";
+import Icon from "@/components/Icon";
 
 type Props = {
   station: Station;
@@ -12,45 +14,52 @@ type Props = {
 // M3: "You're all set!"
 export default function AllSet({ station, session, onDone }: Props) {
   return (
-    <section className="flex min-h-dvh flex-col gap-6 p-5">
-      <PhoneHeader station={station} status="active" />
+    <PhoneScreen station={station} status="active">
+      <ScreenTitle sub="Your playtime is ready. Head to your gaming station!">
+        You&apos;re
+        <br />
+        all set!
+      </ScreenTitle>
 
-      <div>
-        <h1 className="text-5xl font-black uppercase leading-none text-yellow">You&apos;re all set!</h1>
-        <p className="mt-2 text-sm opacity-70">Your playtime is ready. Head to your gaming station!</p>
+      <div className="rounded-2xl border border-offwhite/10 bg-surface">
+        <div className="flex items-center justify-between border-b border-offwhite/10 p-4">
+          <div className="flex items-center gap-3">
+            <Icon name="gamepad" className="size-5 opacity-70" />
+            <div>
+              <p className="text-[10px] uppercase opacity-60">Your station</p>
+              <p className="text-lg font-black uppercase">
+                {station.name} <span className="text-purple">· {station.code}</span>
+              </p>
+            </div>
+          </div>
+          <Icon name="gamepad" className="size-10 text-purple drop-shadow-[0_0_8px_var(--color-purple)]" />
+        </div>
+        <dl className="grid grid-cols-2 divide-x divide-offwhite/10 p-4">
+          <div className="flex items-center gap-3 pr-3">
+            <Icon name="clock" className="size-5 opacity-70" />
+            <div>
+              <dt className="text-[10px] uppercase opacity-60">Playtime</dt>
+              <dd className="font-black">{session.totalMinutes} MIN</dd>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 pl-4">
+            <Icon name="card" className="size-5 opacity-70" />
+            <div>
+              <dt className="text-[10px] uppercase opacity-60">Total paid</dt>
+              <dd className="font-black">{session.totalPaid} KR</dd>
+            </div>
+          </div>
+        </dl>
       </div>
 
-      <dl className="grid grid-cols-2 gap-3 rounded-2xl bg-surface p-4">
-        <div className="col-span-2">
-          <dt className="text-xs uppercase opacity-60">Your station</dt>
-          <dd className="text-xl font-black">
-            {station.name} · {station.code}
-          </dd>
-        </div>
-        <div>
-          <dt className="text-xs uppercase opacity-60">Playtime</dt>
-          <dd className="text-lg font-bold">{session.totalMinutes} min</dd>
-        </div>
-        <div>
-          <dt className="text-xs uppercase opacity-60">Total paid</dt>
-          <dd className="text-lg font-bold">{session.totalPaid} kr</dd>
-        </div>
-        <div className="col-span-2">
-          <dt className="text-xs uppercase opacity-60">Session ends</dt>
-          <dd className="text-lg font-bold">{formatClock(session.endsAt)}</dd>
-        </div>
-      </dl>
-
-      <p className="rounded-2xl border-2 border-surface p-4 text-sm opacity-80">
-        ⓘ The timer starts automatically at the gaming station.
+      <p className="flex items-center gap-3 rounded-2xl border border-offwhite/10 bg-surface p-4 text-xs opacity-80">
+        <Icon name="info" className="size-5 shrink-0" />
+        The timer will start automatically at the gaming station.
       </p>
 
-      <button
-        onClick={onDone}
-        className="mt-auto rounded-full bg-yellow py-4 font-black uppercase text-night shadow-[0_0_24px_var(--color-yellow)]"
-      >
-        Got it! →
-      </button>
-    </section>
+      <Button onClick={onDone} className="mt-auto">
+        Got it!
+      </Button>
+    </PhoneScreen>
   );
 }

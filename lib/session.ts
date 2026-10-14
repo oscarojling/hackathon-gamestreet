@@ -11,6 +11,13 @@ export type Session = {
 };
 
 const CHANNEL = "gamestreet";
+
+// Demo trick: add ?fast to the URL and one "minute" lasts one second,
+// so you can show the warning, time-up and receipt screens in a short video.
+export const minuteMs = () =>
+  typeof window !== "undefined" && new URLSearchParams(window.location.search).has("fast")
+    ? 1000
+    : 60_000;
 const key = (code: string) => `gs-session-${code}`;
 
 export function getSession(code: string): Session | null {
@@ -38,7 +45,7 @@ export function startSession(code: string, minutes: number, price: number): Sess
   const session: Session = {
     code,
     startedAt: now,
-    endsAt: now + minutes * 60_000,
+    endsAt: now + minutes * minuteMs(),
     totalMinutes: minutes,
     totalPaid: price,
   };
@@ -51,7 +58,7 @@ export function extendSession(code: string, minutes: number, price: number): Ses
   if (!current) return null;
   const session: Session = {
     ...current,
-    endsAt: current.endsAt + minutes * 60_000,
+    endsAt: Math.max(current.endsAt, Date.now()) + minutes * minuteMs(),
     totalMinutes: current.totalMinutes + minutes,
     totalPaid: current.totalPaid + price,
   };
