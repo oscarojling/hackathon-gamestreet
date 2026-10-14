@@ -17,26 +17,22 @@ export default function StatusChip({ station, status, note, size = "sm" }: Props
   return (
     <div
       className={`flex items-center rounded-2xl border border-offwhite/10 bg-surface/90 backdrop-blur ${
-        size === "lg" ? "gap-5 px-6 py-3.5 text-lg" : "gap-3 px-4 py-2.5 text-sm"
+        size === "lg" ? "gap-5 px-6 py-3.5 text-lg" : "gap-3 px-4 py-3 text-[15px]"
       }`}
     >
-      <Icon name="gamepad" className={`text-lilac ${size === "lg" ? "size-7" : "size-5"}`} />
-      <span className="flex flex-col leading-tight">
-        <span className="text-[9px] font-semibold tracking-[0.15em] text-lilac uppercase">
-          {size === "lg" ? "Station" : "Your station"}
-        </span>
-        <span className={`font-display tracking-wide uppercase ${size === "lg" ? "text-2xl" : "text-lg"}`}>
-          {station.name} <span className="text-purple">· {station.code}</span>
-        </span>
+      <Icon name="gamepad" className={`${size === "lg" ? "size-7" : "size-7"}`} />
+      <span className={`font-display tracking-wide uppercase ${size === "lg" ? "text-2xl" : "text-[19px]"}`}>
+        {station.name} <span className="text-purple">· {station.code}</span>
       </span>
-      <span className="ml-auto flex flex-col items-end leading-tight">
+      <span className="h-6 w-px bg-offwhite/20" />
+      <span className="ml-auto flex flex-col items-start leading-tight">
         <span className={`flex items-center gap-2 font-display tracking-wide uppercase ${ended ? "text-offwhite/55" : paying ? "text-yellow" : "text-green"}`}>
           <span
             className={`size-2.5 rounded-full ${ended ? "bg-offwhite/55" : paying ? "animate-pulse bg-yellow shadow-[0_0_8px_var(--color-yellow)]" : "bg-green shadow-[0_0_8px_var(--color-green)]"}`}
           />
           {status}
         </span>
-        {note && <span className="text-[10px] text-lilac">{note}</span>}
+        {note && <span className="pl-[18px] text-[11px] text-offwhite/75">{note}</span>}
       </span>
     </div>
   );

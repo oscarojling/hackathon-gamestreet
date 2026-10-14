@@ -45,21 +45,15 @@ export default function ActiveSession({ station, session, addedMinutes, justPaid
         <ScreenTitle image="your-session" alt="Your session" height={92} />
       )}
 
-      <div className="flex flex-col gap-2">
-        {addedMinutes ? (
-          <p className="text-center font-display text-sm tracking-wide text-green uppercase">
-            + {addedMinutes} min added
-          </p>
-        ) : null}
-        <Countdown
-          remainingMs={remaining}
-          totalMs={session.endsAt - session.startedAt}
-          endsAt={session.endsAt}
-          warning={urgent}
-        />
-      </div>
+      <Countdown
+        remainingMs={remaining}
+        totalMs={session.endsAt - session.startedAt}
+        endsAt={session.endsAt}
+        warning={urgent}
+        note={addedMinutes && !urgent ? `+ ${addedMinutes} min added` : undefined}
+      />
 
-      {urgent && <p className="-mb-2 text-center text-offwhite/85">Want to keep playing?</p>}
+      {urgent && <p className="-mb-2 text-center text-lg text-purple">Want to keep playing?</p>}
 
       <Button onClick={onAddTime} icon="plus">
         Add more time
@@ -72,8 +66,8 @@ export default function ActiveSession({ station, session, addedMinutes, justPaid
           { icon: "card", label: "Amount paid", value: `${session.totalPaid} kr` },
           { icon: "calendar", label: "Session ends at", value: formatClock(session.endsAt) },
         ]}
-      >
-        <button
+      />
+      <button
           onClick={onEnd}
           className="flex items-center gap-3 rounded-xl border-2 border-red px-4 py-3 text-red transition hover:bg-red hover:text-offwhite"
         >
@@ -81,7 +75,6 @@ export default function ActiveSession({ station, session, addedMinutes, justPaid
           <span className="flex-1 text-left font-display tracking-wide">End session</span>
           <Icon name="chevron" className="size-5" />
         </button>
-      </InfoRows>
     </PhoneScreen>
   );
 }

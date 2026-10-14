@@ -11,7 +11,7 @@ type Phase = "closed" | "editing" | "sending" | "sent";
 // Fake "Email me my receipt": pre-filled address → sending → receipt preview.
 // Nothing is actually sent.
 export default function EmailReceipt({ station, summary }: { station: Station; summary: SessionSummary }) {
-  const [phase, setPhase] = useState<Phase>("editing");
+  const [phase, setPhase] = useState<Phase>("closed");
   const [email, setEmail] = useState("");
 
   const method = METHODS.find((m) => m.id === summary.method)?.label ?? "Swish";
@@ -25,8 +25,8 @@ export default function EmailReceipt({ station, summary }: { station: Station; s
         className="-mx-1 flex items-center gap-3 rounded-xl px-1 py-2 text-sm transition hover:bg-night/40"
       >
         <Icon name="mail" className="size-5 text-purple" />
-        <span className="flex-1 text-left">Email receipt</span>
-        <Icon name="arrow" className="size-5 text-purple" />
+        <span className="flex-1 text-left font-semibold text-lilac">Email receipt</span>
+        <Icon name="chevron" className="size-5 text-lilac" />
       </button>
     );
   }

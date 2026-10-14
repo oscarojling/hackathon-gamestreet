@@ -90,7 +90,7 @@ export default function OptionList({
             className={`flex items-center gap-3 rounded-2xl border-2 px-4 py-3 transition ${ring} ${
               on
                 ? "border-purple bg-purple shadow-[0_0_20px_var(--color-purple)]"
-                : "border-transparent bg-night/40 hover:border-offwhite/20"
+                : "border-offwhite/10 bg-surface hover:border-offwhite/30"
             }`}
           >
             {input}
@@ -102,7 +102,8 @@ export default function OptionList({
               </span>
               <span className="block text-xs opacity-70">{labels?.[option.id] ?? option.label}</span>
             </span>
-            <span className="font-display text-lg">{option.price} KR</span>
+            <span className={`h-9 w-px ${on ? "bg-offwhite/30" : "bg-offwhite/15"}`} />
+            <span className="w-[70px] text-right font-display text-lg">{option.price} KR</span>
             <Check on={on} />
           </label>
         );

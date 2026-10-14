@@ -5,7 +5,8 @@ type Props = {
   remainingMs: number;
   totalMs: number;
   endsAt: number;
-  warning?: boolean; // last minutes: pink with alarm marks
+  warning?: boolean; // last minutes: red with alarm marks
+  note?: string; // green line instead of "Time left", e.g. "+ 30 min added"
 };
 
 function AlarmMarks({ flip }: { flip?: boolean }) {
@@ -21,16 +22,20 @@ function AlarmMarks({ flip }: { flip?: boolean }) {
 }
 
 // "Timer component" from the UX component sheet
-export default function Countdown({ remainingMs, totalMs, endsAt, warning }: Props) {
+export default function Countdown({ remainingMs, totalMs, endsAt, warning, note }: Props) {
   const progress = Math.max(0, Math.min(1, remainingMs / totalMs));
 
   return (
     <div
       className={`rounded-2xl border bg-surface px-5 py-5 text-center ${
-        warning ? "border-red/60 shadow-[0_0_28px_color-mix(in_srgb,var(--color-red)_45%,transparent)]" : "border-offwhite/10"
+        "border-offwhite/10"
       }`}
     >
-      <p className="font-display text-[11px] tracking-[0.2em] text-lilac uppercase">Time left</p>
+      {note ? (
+        <p className="text-[15px] font-semibold text-green">{note}</p>
+      ) : (
+        <p className="font-display text-[11px] tracking-[0.2em] text-lilac uppercase">Time left</p>
+      )}
       <div className="my-1 flex items-center justify-center gap-2">
         {warning && <AlarmMarks />}
         <p

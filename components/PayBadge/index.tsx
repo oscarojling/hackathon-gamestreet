@@ -13,14 +13,14 @@ export default function PayBadge({ method, className = "size-11" }: { method: Pa
   }
   if (method === "applepay") {
     return (
-      <span className={`${className} grid shrink-0 place-items-center rounded-xl border border-offwhite/15 bg-black`}>
-        <img src="/brand/apple.png" alt="" className="size-[62%] object-contain" />
+      <span className={`${className} grid shrink-0 place-items-center`}>
+        <img src="/brand/apple.png" alt="" className="size-[78%] object-contain" />
       </span>
     );
   }
   return (
-    <span className={`${className} grid shrink-0 place-items-center rounded-xl border border-offwhite/15 bg-night`}>
-      <Icon name="card" className="size-[62%]" />
+    <span className={`${className} grid shrink-0 place-items-center text-offwhite`}>
+      <Icon name="card" className="size-[86%] text-offwhite" />
     </span>
   );
 }

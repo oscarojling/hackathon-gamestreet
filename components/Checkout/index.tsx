@@ -69,7 +69,7 @@ export default function Checkout({ station, option, mode = "start", initialMetho
           </div>
         </div>
         <div className="flex items-center gap-3 pl-4">
-          <Icon name="coins" className="size-6 text-purple" />
+          <Icon name="card" className="size-6 text-purple" />
           <div>
             <dt className="text-[10px] tracking-wider text-lilac uppercase">Total</dt>
             <dd className="font-display text-lg">{option.price} KR</dd>

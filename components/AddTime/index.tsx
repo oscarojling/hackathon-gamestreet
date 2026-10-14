@@ -5,6 +5,8 @@ import { extendOptions } from "@/data/playtimeOptions";
 import { formatClock, minuteMs, type Session } from "@/lib/session";
 import type { PlaytimeOption, Station } from "@/types";
 import PhoneScreen from "@/components/PhoneScreen";
+import { useNow } from "@/lib/useNow";
+import { formatDuration } from "@/lib/time";
 import ScreenTitle from "@/components/ScreenTitle";
 import OptionList from "@/components/OptionList";
 import Button from "@/components/Button";
@@ -25,11 +27,12 @@ type Props = {
 
 // M5: "Add more time?" → then the same Choose payment method screen as M2
 export default function AddTime({ station, session, onBack, onContinue }: Props) {
+  const now = useNow();
   const [selected, setSelected] = useState<PlaytimeOption>(extendOptions[0]);
   const newEndsAt = Math.max(session.endsAt, Date.now()) + selected.minutes * minuteMs();
 
   return (
-    <PhoneScreen station={station} status="active" onBack={onBack}>
+    <PhoneScreen station={station} status="active" statusNote={`${formatDuration(session.endsAt - now)} remaining`} onBack={onBack}>
       <ScreenTitle sub="Keep playing without interruption." image="add-more-time" alt="Add more time?" height={80} />
 
       <OptionList
