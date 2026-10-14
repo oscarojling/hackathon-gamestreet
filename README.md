@@ -1,89 +1,89 @@
 # GameStreet – Scan. Pay. Play.
 
-## ▶️ Live demo: **[gamestreet-mobile.vercel.app/live](https://gamestreet-mobile.vercel.app/live)**
-
-The PC screen and the customer's phone side by side in one window, synced live. Pay on the phone and watch the PC unlock.
-
-| | Link |
-|---|---|
-| ▶️ Live demo (phone + PC, synced) | **[gamestreet-mobile.vercel.app/live](https://gamestreet-mobile.vercel.app/live)** |
-| 🖥️ PC screen (gaming station) | [gamestreet-desktop.vercel.app](https://gamestreet-desktop.vercel.app/station/07) |
-| 📱 Phone (scan & pay) | [gamestreet-mobile.vercel.app](https://gamestreet-mobile.vercel.app/play/07) |
-
-> Real-device test: open the PC screen on a laptop and scan the QR code with your phone.
-
 Built for the **Futuregames Customer Growth Hackathon 2026**, case: **GameStreet**.
+
+**▶️ Try it: [gamestreet-mobile.vercel.app/live](https://gamestreet-mobile.vercel.app/live)**
+
+The live demo shows the gaming desktop and the customer's phone side by side, synced in real time. Pay on the phone and watch the desktop unlock.
 
 ---
 
 ## The idea
 
-Today, GameStreet customers just walk in and play.
-We make every PC sell its own playtime:
+Customers walk in, scan a QR code on any free desktop and start playing. No staff, no app, no account.
 
-1. **Scan** – every free PC shows a QR code
+1. **Scan** – every free desktop shows its own QR code
 2. **Choose time** – 30 min / 50 kr, 60 min / 100 kr or 120 min / 200 kr
-3. **Pay** – Swish, card or Apple Pay (simulated). No app, no account.
-4. **Play** – the PC unlocks and a timer starts
+3. **Pay** – Swish, card or Apple Pay
+4. **Play** – the desktop unlocks and a timer starts
 
-While playing, the customer can **add more time** from the phone or by scanning a new QR code on the PC.
-A warning appears 10 minutes before the session ends. Afterwards the customer gets a **receipt** by email.
+While playing, the customer can **add more time** from their phone without leaving the game. They get a reminder 10 minutes before the end. When time runs out, the desktop locks, and the phone shows a summary with an optional email receipt.
 
-## Screens
+## Links
 
-**Phone** (`/play/[code]`)
-M1 Choose playtime → M2 Payment → M3 You're all set → M4 Your session (live countdown) → M5 Add more time → M6 Session ended + receipt
+| What | Link |
+|---|---|
+| Live demo (desktop + phone, synced) | **[gamestreet-mobile.vercel.app/live](https://gamestreet-mobile.vercel.app/live)** |
+| Desktop screen only | [gamestreet-desktop.vercel.app/station/07](https://gamestreet-desktop.vercel.app/station/07) |
+| Phone screen only | [gamestreet-mobile.vercel.app/play/07](https://gamestreet-mobile.vercel.app/play/07) |
 
-**PC** (`/station/[code]`)
-Game on? (QR) → Ready to play? (dashboard) → In-game timer overlay with add-time QR and 10-min warning → Game over
+To test with a real phone, open the desktop screen on a laptop and scan its QR code.
 
 ## How to demo
 
-1. Open **[/live](https://gamestreet-mobile.vercel.app/live)** (or `localhost:3000/live` locally). It always starts fresh.
-2. The PC screen is on the left and the phone on the right. Use the control bar at the top, or the keyboard shortcuts below.
-3. In the call, share just this browser tab.
-4. Pay on the phone → the PC unlocks. Everything you do on one side updates the other within a second.
+1. Open **[/live](https://gamestreet-mobile.vercel.app/live)**. It always starts fresh.
+2. Use the buttons at the top, or these keys:
 
-Why the mobile site? Phone and PC sync through the browser (`localStorage` + `BroadcastChannel`), which only works when both pages are on the **same site**. The separate desktop and mobile deployments can't talk to each other without a backend.
-
-**Keyboard shortcuts** (work anywhere on `/live`):
-
-| Key | Does |
+| Key | What it does |
 |---|---|
-| `P` | Simulate scan & pay (60 min) |
-| `F` | Fast-forward: 10 min left → 5 min left → ends in 10 s |
-| `T` | Add 30 min |
+| `P` | Pay (60 min) |
 | `G` | Switch between dashboard and game |
+| `T` | Add 30 min |
+| `F` | Fast-forward: 10 min left → 5 min left → ends in 10 s |
 | `E` | End the session |
-| `R` | Reset everything to the start |
+| `R` | Start over |
 
-There is also a small **⏩ Fast-forward** panel in the bottom-left corner of the PC screen while a session is running.
+**Extra URL options** (add to any page):
 
-**URL tricks** (both sites):
-
-- `?reset` – clear all sessions and start from the beginning
+- `?reset` – start from the beginning
 - `?fast` – one minute lasts one second
-- `?fail` – the first payment fails, to show the error state
+- `?fail` – the first payment fails, to show the error message
+
+## Screens
+
+**Phone** (`/play/[code]`): How long will you play? → Choose payment → Your session (countdown) → Add more time → Session ended + receipt
+
+**Desktop** (`/station/[code]`): Game on? (QR code) → Ready to play? (dashboard) → In-game timer → Game over
+
+## What is real and what is simulated
+
+| Real in the prototype | Simulated |
+|---|---|
+| The full flow on phone and desktop | Payments (no money moves) |
+| Live sync between the two screens | The backend (sync runs in the browser) |
+| Timer, add time, auto-lock at the end | Sending the email receipt |
+| A unique QR code per desktop | Expiring QR codes and server checks |
+
+In a real version, a backend (for example Supabase) and a payment provider (Swish/Stripe) would replace the simulated parts.
 
 ## Tech
 
-- **Next.js** (App Router, `cacheComponents`) + **TypeScript**
-- **Tailwind CSS v4**, design tokens in `app/globals.css`
+- **Next.js** (App Router) + **TypeScript**
+- **Tailwind CSS v4**, colours and fonts in `app/globals.css`
 - **qrcode.react** for the QR codes
-- No backend: data lives in `data/`, and payments are simulated with timeouts
-- `lib/session.ts` stores the session in `localStorage` and syncs tabs with `BroadcastChannel`.
-  In production this would be replaced by a backend (e.g. Supabase Realtime) and a real payment provider.
+- `lib/session.ts` stores the session in `localStorage` and syncs browser tabs with `BroadcastChannel`
+
+The live demo runs on the mobile site because browser sync only works when both screens are on the same website.
 
 ```
 app/
-  page.tsx               start page (redirects on Vercel via NEXT_PUBLIC_APP)
-  demo/                  demo start page (never redirects)
-  live/                  PC + phone side by side in one window, synced
+  live/                  desktop + phone side by side (the demo)
   play/[code]/           phone flow
-  station/[code]/        PC screen
+  station/[code]/        desktop screen
+  demo/                  start page with links
 components/              one folder per component: Name/index.tsx
-data/                    stations + playtime options
-lib/                     session contract, time helpers
+data/                    stations and playtime options
+lib/                     session sync and time helpers
 types/                   shared types
 ```
 
@@ -94,9 +94,11 @@ npm install
 npm run dev
 ```
 
-Open [localhost:3000](http://localhost:3000).
+Then open [localhost:3000/live](http://localhost:3000/live).
 
-### Environment variables (Vercel)
+### Deployment (Vercel)
+
+The same code is deployed twice. An environment variable decides which start page each site shows.
 
 | Project | Variable | Value |
 |---|---|---|
