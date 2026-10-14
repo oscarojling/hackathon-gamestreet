@@ -14,7 +14,7 @@ const STEPS = [
 ];
 
 const INFO: { icon: IconName; title: string; sub: string }[] = [
-  { icon: "gamepad", title: "No booking or account needed.", sub: "Just scan, pay & play." },
+  { icon: "noAccount", title: "No booking or account needed.", sub: "Just scan, pay & play." },
   { icon: "food", title: "Food & drinks available", sub: "in the lounge." },
   { icon: "info", title: "No phone?", sub: "Ask at reception." },
 ];

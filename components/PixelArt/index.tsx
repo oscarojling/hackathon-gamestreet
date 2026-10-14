@@ -6,6 +6,10 @@ const PALETTE: Record<string, string> = {
   K: "var(--color-pink)",
   Y: "var(--color-yellow)",
   W: "var(--color-offwhite)",
+  O: "#e8873a", // bun
+  G: "#3fae4a", // lettuce
+  B: "#6b3b22", // patty
+  R: "var(--color-red)",
 };
 
 export const TROPHY = [
@@ -19,6 +23,35 @@ export const TROPHY = [
   ".....Y.....",
   "....YYY....",
   "..YYYYYYY..",
+];
+
+export const BURGER = [
+  "...OOOOOO...",
+  ".OOWOOOOWOO.",
+  "OOOOOOWOOOOO",
+  "GGGGGGGGGGGG",
+  "RRYYRRYYRRYY",
+  "BBBBBBBBBBBB",
+  "BBBBBBBBBBBB",
+  ".OOOOOOOOOO.",
+];
+
+export const QUESTION = [
+  "..PPPPP..",
+  ".PP...PP.",
+  ".....PP..",
+  "....PP...",
+  "....PP...",
+  ".........",
+  "....PP...",
+];
+
+export const CROWN = [
+  "Y...Y...Y",
+  "YY.YYY.YY",
+  "YYYYYYYYY",
+  "YKYYKYYKY",
+  "YYYYYYYYY",
 ];
 
 export const GAMEPAD = [

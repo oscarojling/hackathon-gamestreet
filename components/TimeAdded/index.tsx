@@ -8,6 +8,7 @@ import ScreenTitle from "@/components/ScreenTitle";
 import Countdown from "@/components/Countdown";
 import InfoRows from "@/components/InfoRows";
 import Button from "@/components/Button";
+import Alert from "@/components/Alert";
 
 type Props = {
   station: Station;
@@ -23,6 +24,7 @@ export default function TimeAdded({ station, session, addedMinutes, onBackToSess
 
   return (
     <PhoneScreen station={station} status="active" statusNote={`+${addedMinutes} min added`}>
+      <Alert tone="info" title="Your session has been extended!" />
       <ScreenTitle sub="Your session has been extended.">
         Time
         <br />

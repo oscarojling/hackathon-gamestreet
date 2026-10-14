@@ -1,6 +1,10 @@
-// 42:15 under an hour, 1:12:15 over an hour
+import { minuteMs } from "@/lib/session";
+
+// 42:15 under an hour, 1:12:15 over an hour.
+// In ?fast demo mode a "minute" is 1 s, so scale back up to show real-looking minutes.
 export function formatDuration(ms: number) {
-  const total = Math.max(0, Math.ceil(ms / 1000));
+  const scaled = (ms * 60_000) / minuteMs();
+  const total = Math.max(0, Math.ceil(scaled / 1000));
   const h = Math.floor(total / 3600);
   const m = Math.floor((total % 3600) / 60);
   const s = total % 60;

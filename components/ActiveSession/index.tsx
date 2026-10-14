@@ -10,7 +10,8 @@ import Countdown from "@/components/Countdown";
 import InfoRows from "@/components/InfoRows";
 import Button from "@/components/Button";
 
-const WARNING_MINUTES = 10;
+import { LOW_MINUTES, URGENT_MINUTES } from "@/lib/thresholds";
+import Alert from "@/components/Alert";
 
 type Props = {
   station: Station;
@@ -23,7 +24,8 @@ type Props = {
 export default function ActiveSession({ station, session, onAddTime, onEnd }: Props) {
   const now = useNow();
   const remaining = session.endsAt - now;
-  const warning = remaining <= WARNING_MINUTES * minuteMs();
+  const low = remaining <= LOW_MINUTES * minuteMs();
+  const urgent = remaining <= URGENT_MINUTES * minuteMs();
 
   useEffect(() => {
     if (remaining <= 0) onEnd();
@@ -31,7 +33,13 @@ export default function ActiveSession({ station, session, onAddTime, onEnd }: Pr
 
   return (
     <PhoneScreen station={station} status="active">
-      {!warning && (
+      {low ? (
+        <Alert tone="warning" title={`${Math.max(1, Math.ceil(remaining / minuteMs()))} min left!`} sub="Want to keep playing?">
+          <Button onClick={onAddTime} icon="plus" arrow={false} className="!py-3 !text-base">
+            Add time
+          </Button>
+        </Alert>
+      ) : (
         <ScreenTitle>
           Your
           <br />
@@ -43,10 +51,8 @@ export default function ActiveSession({ station, session, onAddTime, onEnd }: Pr
         remainingMs={remaining}
         totalMs={session.endsAt - session.startedAt}
         endsAt={session.endsAt}
-        warning={warning}
+        warning={urgent}
       />
-
-      {warning && <p className="-mt-2 text-center font-display text-lg text-pink">Want to keep playing?</p>}
 
       <Button onClick={onAddTime} icon="plus">
         Add more time
@@ -57,7 +63,7 @@ export default function ActiveSession({ station, session, onAddTime, onEnd }: Pr
         rows={[
           { icon: "clock", label: "Purchased time", value: `${session.totalMinutes} min` },
           { icon: "coins", label: "Amount paid", value: `${session.totalPaid} kr` },
-          { icon: "receipt", label: "Session ends at", value: formatClock(session.endsAt) },
+          { icon: "calendar", label: "Session ends at", value: formatClock(session.endsAt) },
         ]}
       >
         <Button variant="destructive" icon="logout" onClick={onEnd} className="normal-case">

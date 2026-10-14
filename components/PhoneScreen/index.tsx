@@ -38,10 +38,8 @@ export default function PhoneScreen({ station, status, statusNote, onBack, child
     <section className="relative flex min-h-dvh flex-col gap-5 p-5 pb-4">
       <PhoneHeader station={station} status={status} statusNote={statusNote} onBack={onBack} />
       {children}
-      <footer className="mt-2 flex items-center justify-center gap-3 font-display text-[11px] tracking-[0.25em] text-offwhite/50">
-        <span>EAT · DRINK</span>
-        <GsBadge className="size-7" />
-        <span>PLAY · REPEAT</span>
+      <footer className="mt-2 flex justify-center">
+        <GsBadge className="size-14" />
       </footer>
       <PixelCorner />
       <PixelCorner flip />

@@ -38,7 +38,7 @@ export default function OptionList({
 }: Props) {
   return (
     <fieldset
-      className={variant === "tiles" ? "grid grid-cols-3 gap-2.5" : "flex flex-col gap-2"}
+      className={variant === "tiles" ? "grid grid-cols-4 gap-2" : "flex flex-col gap-2"}
       disabled={disabled}
     >
       <legend className="sr-only">Playtime</legend>
@@ -60,7 +60,7 @@ export default function OptionList({
           return (
             <label
               key={option.id}
-              className={`relative flex flex-col items-center gap-1.5 rounded-2xl border-2 px-2 py-4 text-center transition ${ring} ${
+              className={`relative flex flex-col items-center gap-1.5 rounded-2xl border-2 px-1 py-4 text-center transition ${ring} ${
                 on
                   ? "border-purple bg-purple shadow-[0_0_24px_var(--color-purple)]"
                   : "border-offwhite/10 bg-surface hover:border-offwhite/30"
@@ -72,14 +72,14 @@ export default function OptionList({
                   <Check on />
                 </span>
               )}
-              <Icon name="clock" className={`size-8 ${on ? "text-offwhite" : "text-purple"}`} />
-              <span className="font-display text-2xl leading-none">
+              <Icon name="clock" className={`size-7 ${on ? "text-offwhite" : "text-lilac"}`} />
+              <span className="font-display text-lg leading-none whitespace-nowrap">
+                {prefix}
                 {option.minutes} MIN
               </span>
-              <span className={`font-display text-lg leading-none ${on ? "text-offwhite" : "text-purple"}`}>
+              <span className={`font-display text-base leading-none ${on ? "text-offwhite" : "text-lilac"}`}>
                 {option.price} KR
               </span>
-              <span className="text-[11px] leading-tight opacity-70">{labels?.[option.id] ?? option.label}</span>
             </label>
           );
         }

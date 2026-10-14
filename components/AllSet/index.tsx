@@ -5,6 +5,7 @@ import ScreenTitle from "@/components/ScreenTitle";
 import Button from "@/components/Button";
 import Icon from "@/components/Icon";
 import Banner from "@/components/Banner";
+import Alert from "@/components/Alert";
 import Confetti from "@/components/Confetti";
 import PixelArt, { GAMEPAD } from "@/components/PixelArt";
 
@@ -19,6 +20,7 @@ export default function AllSet({ station, session, onDone }: Props) {
   return (
     <PhoneScreen station={station} status="active">
       <Confetti />
+      <Alert tone="success" title="Payment successful!" />
       <ScreenTitle sub="Your playtime is ready. Head to your gaming station!">
         You&apos;re
         <br />

@@ -7,6 +7,7 @@ import ScreenTitle from "@/components/ScreenTitle";
 import Button from "@/components/Button";
 import Icon from "@/components/Icon";
 import Banner from "@/components/Banner";
+import Alert from "@/components/Alert";
 import PayBadge from "@/components/PayBadge";
 import PaymentOverlay from "@/components/PaymentOverlay";
 
@@ -117,7 +118,7 @@ export default function Checkout({ station, option, onBack, onPaid }: Props) {
         })}
       </fieldset>
 
-      {status === "failed" && <Banner icon="warning" title="Payment failed." sub="Try again or pick another method." />}
+      {status === "failed" && <Alert tone="error" title="Something went wrong." sub="Please try again or pick another method." />}
 
       {processing && (
         <PaymentOverlay method={method} amount={option.price} phase={status === "paid" ? "done" : "waiting"} />

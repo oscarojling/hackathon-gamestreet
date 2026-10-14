@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { playtimeOptions } from "@/data/playtimeOptions";
+import { extendOptions } from "@/data/playtimeOptions";
 import { formatClock, minuteMs, type Session } from "@/lib/session";
 import type { PlaytimeOption, Station } from "@/types";
 import type { PayMethod } from "@/components/Checkout";
@@ -29,7 +29,7 @@ type Props = {
 
 // M5: "Add more time?" – the "Add more time card" from the UX sheet
 export default function AddTime({ station, session, method, onBack, onPaid }: Props) {
-  const [selected, setSelected] = useState<PlaytimeOption>(playtimeOptions[0]);
+  const [selected, setSelected] = useState<PlaytimeOption>(extendOptions[0]);
   const [phase, setPhase] = useState<"idle" | "waiting" | "done">("idle");
   const processing = phase !== "idle";
 
@@ -55,7 +55,7 @@ export default function AddTime({ station, session, method, onBack, onPaid }: Pr
 
       <div className="flex flex-col gap-3 rounded-2xl border border-offwhite/10 bg-surface p-3">
         <OptionList
-          options={playtimeOptions}
+          options={extendOptions}
           selected={selected}
           onSelect={setSelected}
           prefix="+ "

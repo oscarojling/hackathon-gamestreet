@@ -70,18 +70,43 @@ function Game() {
         {/* hero silhouette */}
         <path d="M300 900 L330 700 L370 650 L410 700 L440 900Z" fill="#0a0814" />
         <circle cx="370" cy="630" r="26" fill="#0a0814" />
-        {/* dragon silhouette */}
-        <path d="M1150 220 l60 20 l40 -50 l10 60 l70 10 l-70 20 l-20 50 l-30 -40 l-70 10 l40 -30Z" fill="#2b1f3f" opacity="0.85" />
       </svg>
       <div className="absolute inset-0 bg-[url(/game-bg.jpg)] bg-cover bg-center" />
     </>
   );
 }
 
-export default function Backdrop({ variant }: { variant: "lounge" | "game" }) {
+const CORNER = ["P....", "PK...", ".PP..", "..PKP", "...PP"];
+
+function PixelCorner({ className }: { className: string }) {
+  return (
+    <svg viewBox="0 0 5 5" shapeRendering="crispEdges" className={`absolute size-14 ${className}`}>
+      {CORNER.flatMap((row, y) =>
+        [...row].map((c, x) =>
+          c !== "." ? (
+            <rect key={`${x}-${y}`} x={x} y={y} width={1} height={1} fill={c === "K" ? "var(--color-pink)" : "var(--color-purple)"} />
+          ) : null,
+        ),
+      )}
+    </svg>
+  );
+}
+
+// Calm dark panel with pixel corners (the "Ready to play?" dashboard design)
+function Panel() {
+  return (
+    <>
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,color-mix(in_srgb,var(--color-purple)_22%,transparent),transparent_60%)]" />
+      <PixelCorner className="bottom-3 left-3 -scale-y-100" />
+      <PixelCorner className="right-3 bottom-3 -scale-100" />
+    </>
+  );
+}
+
+export default function Backdrop({ variant }: { variant: "lounge" | "game" | "panel" }) {
   return (
     <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden bg-night">
-      {variant === "lounge" ? <Lounge /> : <Game />}
+      {variant === "lounge" ? <Lounge /> : variant === "game" ? <Game /> : <Panel />}
     </div>
   );
 }

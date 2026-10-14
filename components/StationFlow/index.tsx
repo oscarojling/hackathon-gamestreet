@@ -81,7 +81,7 @@ export default function StationFlow({ station }: { station: Station }) {
 
   return (
     <div className="relative isolate h-dvh w-full overflow-hidden">
-      <Backdrop variant={(playing && view === "game") || over ? "game" : "lounge"} />
+      <Backdrop variant={(playing && view === "game") || over ? "game" : playing ? "panel" : "lounge"} />
       <div key={screenKey} className="h-full motion-safe:animate-screen-in">
       {playing && session && view === "launcher" ? (
         <Launcher

@@ -8,11 +8,12 @@ type Props = {
   remainingMs: number;
   warning: boolean;
   onAddTime: () => void;
+  addLabel?: string; // "Time" in-game, "Add time" on the dashboard
   children?: ReactNode; // extra buttons, e.g. "Games"
 };
 
 // Timer + "+ Time" pill, shown on the dashboard and in-game
-export default function TimeBar({ remainingMs, warning, onAddTime, children }: Props) {
+export default function TimeBar({ remainingMs, warning, onAddTime, addLabel = "Time", children }: Props) {
   return (
     <div
       className={`flex items-center gap-2 rounded-2xl border bg-night/85 p-2 backdrop-blur ${
@@ -32,7 +33,7 @@ export default function TimeBar({ remainingMs, warning, onAddTime, children }: P
         onClick={onAddTime}
         className="flex items-center gap-1.5 rounded-xl bg-yellow px-4 py-2.5 font-display tracking-wide text-night uppercase transition hover:brightness-110 active:scale-[0.97]"
       >
-        <Icon name="plus" className="size-4" /> Time
+        <Icon name="plus" className="size-4" /> {addLabel}
       </button>
       {children}
     </div>
