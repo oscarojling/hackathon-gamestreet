@@ -106,5 +106,5 @@ Open [localhost:3000](http://localhost:3000).
 
 ## Team
 
-- **UX:** _add names_
-- **Development:** Oscar Öjling, _add name_
+- **UX design:** Sana Mirza, PA Nguyen
+- **Development:** Oscar Öjling, Buddhi De Silva
