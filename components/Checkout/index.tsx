@@ -58,7 +58,7 @@ export default function Checkout({ station, option, mode = "start", initialMetho
       <ScreenTitle kicker="Payment" sub="How would you like to pay?">
         Choose
         <br />
-        payment
+        <span className="text-offwhite">payment</span>
         <br />
         method
       </ScreenTitle>

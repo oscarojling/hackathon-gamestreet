@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { PlaytimeOption, Station } from "@/types";
 import {
   endSession,
@@ -10,6 +10,7 @@ import {
   minuteMs,
   resetFromUrl,
   startSession,
+  subscribe,
   type Session,
 } from "@/lib/session";
 import { playtimeOptions } from "@/data/playtimeOptions";
@@ -43,6 +44,21 @@ export default function PlayFlow({ station }: { station: Station }) {
     }
   }, [station.code]);
 
+  // Listen for changes from the PC tab (fast-forward, +time, end) so both timers match
+  const sessionRef = useRef(session);
+  sessionRef.current = session;
+  const finishRef = useRef<() => void>(() => {});
+
+  useEffect(() => {
+    return subscribe(station.code, (next) => {
+      if (next) {
+        if (sessionRef.current) setSession(next); // only update a session we already have
+      } else if (sessionRef.current) {
+        finishRef.current(); // ended on the PC → show the receipt here too
+      }
+    });
+  }, [station.code]);
+
   const finish = useCallback(() => {
     if (!session) return;
     const played = Math.min(Date.now(), session.endsAt) - session.startedAt;
@@ -59,6 +75,7 @@ export default function PlayFlow({ station }: { station: Station }) {
     setAddedMinutes(0);
     setStep("ended");
   }, [session, station.code, method]);
+  finishRef.current = finish;
 
   let screen: React.ReactNode = null;
 

@@ -18,9 +18,9 @@ export default function GameOver({ onNewSession }: { onNewSession: () => void })
         <h1 className="font-display text-8xl uppercase text-outline">Game over!</h1>
         <p className="text-2xl text-offwhite/90">Your session has ended.</p>
         <p className="font-display tracking-[0.35em] uppercase italic">Thanks for playing!</p>
-        <div className="mt-6 w-96">
-          <Button onClick={onNewSession} icon="refresh" arrow={false}>
-            Start a new session
+        <div className="mt-6">
+          <Button onClick={onNewSession} icon="qr" arrow={false} className="px-6 whitespace-nowrap">
+            Scan QR code to start a new session
           </Button>
         </div>
       </div>

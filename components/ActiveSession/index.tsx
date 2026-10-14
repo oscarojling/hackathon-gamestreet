@@ -36,7 +36,7 @@ export default function ActiveSession({ station, session, addedMinutes, onAddTim
         <ScreenTitle>
           Your
           <br />
-          session
+          <span className="text-lilac">session</span>
         </ScreenTitle>
       )}
 

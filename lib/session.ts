@@ -29,9 +29,12 @@ export function getSession(code: string): Session | null {
   }
 }
 
+// Each tab gets an id so it can ignore its own broadcasts
+const TAB_ID = Math.random().toString(36).slice(2);
+
 function broadcast(code: string, session: Session | null) {
   const ch = new BroadcastChannel(CHANNEL);
-  ch.postMessage({ code, session });
+  ch.postMessage({ code, session, from: TAB_ID });
   ch.close();
 }
 
@@ -75,7 +78,7 @@ export function endSession(code: string) {
 export function subscribe(code: string, cb: (s: Session | null) => void) {
   const ch = new BroadcastChannel(CHANNEL);
   ch.onmessage = (e) => {
-    if (e.data?.code === code) cb(e.data.session);
+    if (e.data?.code === code && e.data.from !== TAB_ID) cb(e.data.session);
   };
   return () => ch.close();
 }

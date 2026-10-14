@@ -98,8 +98,14 @@ export default function Launcher({ station, session, onOpenLibrary, onDemoAddTim
         <span className="flex items-center gap-6">
           <Logo />
           <span className="h-8 w-px bg-offwhite/20" />
-          <span className="font-display text-xl tracking-wide uppercase">
-            {station.name} <span className="text-purple">· {station.code}</span>
+          <span className="flex items-center gap-3">
+            <Icon name="gamepad" className="size-7 text-lilac" />
+            <span className="flex flex-col leading-tight">
+              <span className="text-[10px] font-semibold tracking-[0.15em] text-lilac uppercase">Your station</span>
+              <span className="font-display text-2xl tracking-wide uppercase">
+                {station.name} <span className="text-purple">· {station.code}</span>
+              </span>
+            </span>
           </span>
         </span>
         <TimeBar

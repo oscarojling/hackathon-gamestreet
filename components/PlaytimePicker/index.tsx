@@ -22,7 +22,7 @@ export default function PlaytimePicker({ station, selected, onSelect, onContinue
       <ScreenTitle sub="Choose your playtime.">
         How long
         <br />
-        will you
+        <span className="text-lilac">will you</span>
         <br />
         play?
       </ScreenTitle>

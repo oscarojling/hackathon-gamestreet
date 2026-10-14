@@ -24,7 +24,7 @@ export default function AllSet({ station, session, onDone }: Props) {
       <ScreenTitle sub="Your playtime is ready. Head to your gaming station!">
         You&apos;re
         <br />
-        all set!
+        <span className="text-lilac">all set!</span>
       </ScreenTitle>
 
       <div className="rounded-2xl border border-offwhite/10 bg-surface">

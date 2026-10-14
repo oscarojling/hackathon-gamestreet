@@ -20,10 +20,14 @@ export default function StatusChip({ station, status, note, size = "sm" }: Props
       }`}
     >
       <Icon name="gamepad" className={`text-lilac ${size === "lg" ? "size-7" : "size-5"}`} />
-      <span className="font-display tracking-wide uppercase">
-        {station.name} · {station.code}
+      <span className="flex flex-col leading-tight">
+        <span className="text-[9px] font-semibold tracking-[0.15em] text-lilac uppercase">
+          {size === "lg" ? "Station" : "Your station"}
+        </span>
+        <span className={`font-display tracking-wide uppercase ${size === "lg" ? "text-2xl" : "text-lg"}`}>
+          {station.name} <span className="text-purple">· {station.code}</span>
+        </span>
       </span>
-      <span className="h-5 w-px bg-offwhite/15" />
       <span className="ml-auto flex flex-col items-end leading-tight">
         <span className={`flex items-center gap-2 font-display tracking-wide uppercase ${ended ? "text-offwhite/55" : "text-green"}`}>
           <span

@@ -14,7 +14,7 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
 // Button states from the UX component sheet: default, hover, pressed, disabled, loading
 const VARIANTS: Record<Variant, string> = {
   primary:
-    "rounded-xl bg-yellow py-4 text-lg text-night shadow-[0_0_28px_color-mix(in_srgb,var(--color-yellow)_45%,transparent)] hover:brightness-110 active:brightness-90 disabled:bg-offwhite/20 disabled:text-offwhite/40 disabled:shadow-none",
+    "rounded-xl bg-yellow py-4 text-lg text-night shadow-[0_4px_0_#b88f0f,0_0_28px_color-mix(in_srgb,var(--color-yellow)_35%,transparent)] hover:brightness-110 active:translate-y-0.5 active:shadow-[0_2px_0_#b88f0f] disabled:bg-offwhite/20 disabled:text-offwhite/40 disabled:shadow-none",
   secondary:
     "rounded-xl border-2 border-purple bg-night py-3.5 text-purple hover:bg-purple hover:text-offwhite active:bg-purple/70 active:text-offwhite disabled:border-offwhite/15 disabled:text-offwhite/30",
   destructive:

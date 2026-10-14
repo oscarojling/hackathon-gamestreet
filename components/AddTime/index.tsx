@@ -31,9 +31,9 @@ export default function AddTime({ station, session, onBack, onContinue }: Props)
   return (
     <PhoneScreen station={station} status="active" onBack={onBack}>
       <ScreenTitle sub="Keep playing without interruption.">
-        Add more
+        Add
         <br />
-        time?
+        <span className="text-offwhite">more time?</span>
       </ScreenTitle>
 
       <OptionList
