@@ -43,7 +43,7 @@ const ASSETS = new Set<IconName>([
 // Stroke icons from the UX sheet used as a mask, so they take the surrounding text colour
 // (dark on yellow buttons, white on tiles, lilac in headers).
 const MASKED = new Set<IconName>(["arrow", "back", "plus", "close"]);
-const TINTED = /text-(red|yellow|green|night|offwhite|pink)/;
+const TINTED = /text-(red|yellow|green|night|offwhite|pink|\[#)/;
 
 export default function Icon({ name, className = "size-5" }: { name: IconName; className?: string }) {
   if (MASKED.has(name)) {

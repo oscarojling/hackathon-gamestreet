@@ -26,7 +26,7 @@ export default function InfoRows({ title, rows, children, iconTone = "lilac" }: 
           </div>
         ))}
       </dl>
-      {children && <div className="mt-3 flex flex-col gap-2.5">{children}</div>}
+      {children && <div className="flex flex-col gap-2.5 border-t border-offwhite/10 pt-3">{children}</div>}
     </div>
   );
 }

@@ -12,17 +12,19 @@ type Props = {
 // "Add more time?" popup with a QR to the phone flow (dashboard + in-game)
 export default function AddTimePopup({ code, onClose, onDemoAddTime }: Props) {
   return (
-    <div className="animate-screen-in relative flex flex-col items-center gap-2 rounded-2xl border border-offwhite/10 bg-night/95 p-5 backdrop-blur">
+    <div className="animate-screen-in relative flex flex-col items-center gap-3 rounded-2xl border border-offwhite/10 bg-night/95 p-5 backdrop-blur">
       <button
         onClick={onClose}
         aria-label="Close"
-        className="absolute top-2 right-2 grid size-8 place-items-center rounded-lg text-purple hover:bg-surface"
+        className="absolute top-3 right-3 grid size-8 place-items-center rounded-lg text-lilac hover:bg-surface"
       >
         <Icon name="close" className="size-5" />
       </button>
-      <p className="font-display text-xl tracking-wide uppercase">Add more time?</p>
+      <div className="self-stretch pr-8">
+        <p className="text-lg font-bold">Add time from your mobile</p>
+        <p className="text-sm text-offwhite/70">Or scan this QR code.</p>
+      </div>
       <StationQR code={code} size={140} />
-      <p className="font-display text-sm tracking-widest uppercase">Scan to add time</p>
       <DemoButton
         onClick={() => {
           onDemoAddTime();

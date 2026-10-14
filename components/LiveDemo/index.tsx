@@ -7,6 +7,8 @@ import Icon from "@/components/Icon";
 
 const PC = { src: "/station/07", w: 1440, h: 900 };
 const PHONE = { src: "/play/07", w: 390, h: 844 };
+const STATUS_BAR = 50; // fake iOS status bar (9:41) like in the UX frames
+const HOME_BAR = 30; // iOS home indicator area at the bottom
 
 // Scales a fixed-size iframe to fit its container (keeps the real layout, just smaller)
 function useFitScale(w: number, h: number, pad = 0) {
@@ -32,6 +34,22 @@ const CONTROLS = [
   { key: "g", label: "Dashboard / game", icon: "gamepad" },
   { key: "e", label: "End session", icon: "logout" },
 ] as const;
+
+// Signal, wifi and battery, drawn small like the iPhone status bar
+function StatusIcons() {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 70 14" className="h-[13px] w-[66px]" fill="currentColor">
+      <rect x="0" y="9" width="3" height="4" rx="1" />
+      <rect x="5" y="6.5" width="3" height="6.5" rx="1" />
+      <rect x="10" y="4" width="3" height="9" rx="1" />
+      <rect x="15" y="1" width="3" height="12" rx="1" />
+      <path d="M31 3.5a10 10 0 0 1 7 2.8l1.4-1.5A12 12 0 0 0 31 1.5a12 12 0 0 0-8.4 3.3L24 6.3a10 10 0 0 1 7-2.8Zm0 4a6 6 0 0 1 4.2 1.7l1.4-1.5A8 8 0 0 0 31 5.5a8 8 0 0 0-5.6 2.2l1.4 1.5A6 6 0 0 1 31 7.5Zm0 4 2.4-2.4a3.4 3.4 0 0 0-4.8 0Z" />
+      <rect x="44.5" y="1" width="21" height="12" rx="3.5" fill="none" stroke="currentColor" strokeOpacity=".4" />
+      <rect x="46.5" y="3" width="17" height="8" rx="2" />
+      <path d="M67 5v4a2 2 0 0 0 0-4Z" fillOpacity=".4" />
+    </svg>
+  );
+}
 
 // One-window live demo: PC screen (left) + phone (right), both real pages in iframes on the same site,
 // so they sync through localStorage/BroadcastChannel exactly like two tabs would.
@@ -124,12 +142,19 @@ export default function LiveDemo() {
                 className="absolute top-0 left-0 overflow-hidden rounded-[2.5rem] border-[10px] border-black shadow-2xl"
                 style={{ width: PHONE.w * phone.scale + 20, height: PHONE.h * phone.scale + 20 }}
               >
-                <iframe
-                  key={`phone-${run}`}
-                  src={PHONE.src}
-                  title="Phone"
+                <div
+                  className="bg-night"
                   style={{ width: PHONE.w, height: PHONE.h, transform: `scale(${phone.scale})`, transformOrigin: "0 0" }}
-                />
+                >
+                  <div className="flex items-center justify-between px-8 pt-1 text-[17px] font-semibold text-offwhite" style={{ height: STATUS_BAR }}>
+                    <span>9:41</span>
+                    <StatusIcons />
+                  </div>
+                  <iframe key={`phone-${run}`} src={PHONE.src} title="Phone" style={{ width: PHONE.w, height: PHONE.h - STATUS_BAR - HOME_BAR }} />
+                  <div className="grid place-items-center" style={{ height: HOME_BAR }}>
+                    <span className="h-[5px] w-[134px] rounded-full bg-offwhite" />
+                  </div>
+                </div>
               </div>
             )}
           </div>
