@@ -25,7 +25,7 @@ export default function OptionList({ options, selected, onSelect, prefix = "", l
             className={`flex cursor-pointer items-center gap-3 rounded-2xl border-2 px-4 py-3 transition ${
               isSelected
                 ? "border-purple bg-purple shadow-[0_0_20px_var(--color-purple)]"
-                : "border-offwhite/10 bg-surface"
+                : "border-offwhite/10 bg-surface hover:border-offwhite/30"
             }`}
           >
             <Icon name="clock" className="size-5 shrink-0 opacity-80" />

@@ -6,9 +6,10 @@ import PhoneScreen from "@/components/PhoneScreen";
 import ScreenTitle from "@/components/ScreenTitle";
 import Button from "@/components/Button";
 import Icon from "@/components/Icon";
+import PaymentOverlay from "@/components/PaymentOverlay";
 
 export type PayMethod = "swish" | "card" | "applepay";
-type Status = "idle" | "processing" | "failed";
+type Status = "idle" | "processing" | "paid" | "failed";
 
 export const METHODS: { id: PayMethod; label: string; sub: string }[] = [
   { id: "swish", label: "Swish", sub: "Pay with Swish" },
@@ -49,12 +50,17 @@ export default function Checkout({ station, option, onBack, onPaid }: Props) {
       const shouldFail =
         new URLSearchParams(window.location.search).has("fail") && attempts.current === 0;
       attempts.current += 1;
-      if (shouldFail) setStatus("failed");
-      else onPaid(method);
-    }, 1800);
+      if (shouldFail) {
+        setStatus("failed");
+        return;
+      }
+      setStatus("paid");
+      navigator.vibrate?.(60); // little buzz on real phones
+      setTimeout(() => onPaid(method), 900);
+    }, 2200);
   }
 
-  const processing = status === "processing";
+  const processing = status === "processing" || status === "paid";
 
   return (
     <PhoneScreen station={station} status="available" onBack={processing ? undefined : onBack}>
@@ -93,7 +99,7 @@ export default function Checkout({ station, option, onBack, onPaid }: Props) {
               className={`flex cursor-pointer items-center gap-3 rounded-2xl border-2 px-4 py-3 transition ${
                 selected
                   ? "border-purple bg-purple shadow-[0_0_20px_var(--color-purple)]"
-                  : "border-offwhite/10 bg-surface"
+                  : "border-offwhite/10 bg-surface hover:border-offwhite/30"
               }`}
             >
               <MethodBadge id={m.id} />
@@ -123,9 +129,13 @@ export default function Checkout({ station, option, onBack, onPaid }: Props) {
       </fieldset>
 
       {status === "failed" && (
-        <p role="alert" className="rounded-2xl border-2 border-pink p-4 text-sm text-pink">
+        <p role="alert" className="rounded-2xl border-2 border-red p-4 text-sm text-red">
           Payment failed. Try again or pick another method.
         </p>
+      )}
+
+      {processing && (
+        <PaymentOverlay method={method} amount={option.price} phase={status === "paid" ? "done" : "waiting"} />
       )}
 
       <div className="mt-auto flex flex-col gap-2">

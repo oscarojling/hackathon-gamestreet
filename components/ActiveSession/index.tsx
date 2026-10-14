@@ -64,7 +64,7 @@ export default function ActiveSession({ station, session, onAddTime, onEnd }: Pr
 
       <button
         onClick={onEnd}
-        className="mt-auto flex items-center gap-3 rounded-2xl border-2 border-pink/60 px-4 py-3 text-sm font-bold text-pink"
+        className="mt-auto flex items-center gap-3 rounded-2xl border-2 border-red/60 px-4 py-3 text-sm font-bold text-red"
       >
         <Icon name="logout" className="size-4" />
         <span className="flex-1 text-left">End session</span>

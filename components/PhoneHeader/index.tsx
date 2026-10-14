@@ -11,9 +11,9 @@ type Props = {
 };
 
 const STATUS_COLOR: Record<StationStatus, string> = {
-  available: "text-mint",
-  active: "text-mint",
-  ended: "text-offwhite/50",
+  available: "text-green",
+  active: "text-green",
+  ended: "text-red",
 };
 
 export default function PhoneHeader({ station, status = "available", statusNote, onBack }: Props) {
@@ -41,7 +41,7 @@ export default function PhoneHeader({ station, status = "available", statusNote,
         </span>
         <span className={`flex flex-col items-end leading-tight ${STATUS_COLOR[status]}`}>
           <span className="flex items-center gap-1.5">
-            <span className={`size-2 rounded-full ${status === "ended" ? "bg-offwhite/50" : "bg-mint"}`} />
+            <span className={`size-2 rounded-full ${status === "ended" ? "bg-red" : "bg-green"}`} />
             {status}
           </span>
           {statusNote && <span className="text-[10px] font-medium normal-case opacity-80">{statusNote}</span>}

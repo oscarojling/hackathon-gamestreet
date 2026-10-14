@@ -11,6 +11,7 @@ import ScreenTitle from "@/components/ScreenTitle";
 import OptionList from "@/components/OptionList";
 import Button from "@/components/Button";
 import Icon from "@/components/Icon";
+import PaymentOverlay from "@/components/PaymentOverlay";
 
 const EXTEND_LABELS: Record<string, string> = {
   "30": "A little more time",
@@ -29,14 +30,19 @@ type Props = {
 // M5: "Add more time?" – pay with the same method as before
 export default function AddTime({ station, session, method, onBack, onPaid }: Props) {
   const [selected, setSelected] = useState<PlaytimeOption>(playtimeOptions[0]);
-  const [processing, setProcessing] = useState(false);
+  const [phase, setPhase] = useState<"idle" | "waiting" | "done">("idle");
+  const processing = phase !== "idle";
 
   const newEndsAt = Math.max(session.endsAt, Date.now()) + selected.minutes * minuteMs();
   const methodLabel = METHODS.find((m) => m.id === method)?.label ?? "Swish";
 
   function pay() {
-    setProcessing(true);
-    setTimeout(() => onPaid(selected), 1500);
+    setPhase("waiting");
+    setTimeout(() => {
+      setPhase("done");
+      navigator.vibrate?.(60);
+      setTimeout(() => onPaid(selected), 900);
+    }, 1800);
   }
 
   return (
@@ -69,6 +75,8 @@ export default function AddTime({ station, session, method, onBack, onPaid }: Pr
           <dd className="font-black">{formatClock(newEndsAt)}</dd>
         </div>
       </dl>
+
+      {processing && <PaymentOverlay method={method} amount={selected.price} phase={phase === "done" ? "done" : "waiting"} />}
 
       <div className="mt-auto flex flex-col gap-2">
         <Button onClick={pay} disabled={processing} arrow={!processing}>

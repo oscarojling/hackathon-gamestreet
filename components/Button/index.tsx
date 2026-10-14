@@ -16,7 +16,7 @@ export default function Button({ variant = "primary", arrow = true, className = 
   return (
     <button
       {...rest}
-      className={`flex w-full items-center justify-center gap-2 rounded-full font-black uppercase transition active:scale-[0.98] disabled:opacity-60 ${VARIANTS[variant]} ${className}`}
+      className={`flex w-full items-center justify-center gap-2 rounded-full font-black uppercase transition hover:brightness-110 active:scale-[0.98] disabled:opacity-60 ${VARIANTS[variant]} ${className}`}
     >
       {children}
       {arrow && <Icon name="arrow" className="size-4" />}
