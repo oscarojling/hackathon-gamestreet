@@ -11,11 +11,9 @@ const PHONE = "/play/07";
 
 // Opens the phone flow in a phone-sized window and the PC screen in this tab.
 // Same browser → paying on the "phone" unlocks the "PC" live.
-// Always starts fresh: any old session is cleared first.
+// Opens the one-window live demo (PC + phone side by side, synced). It starts fresh by itself.
 function startLiveDemo() {
-  resetAllSessions();
-  window.open(PHONE, "gamestreet-phone", "width=420,height=880,left=40,top=40");
-  window.location.href = STATION;
+  window.location.href = "/live";
 }
 
 export default function DemoStart() {
@@ -82,7 +80,7 @@ export default function DemoStart() {
       </button>
 
       <p className="text-xs opacity-50">
-        Live demo opens the phone in its own window. Allow pop-ups if nothing happens. PC shortcuts: P = pay ·
+        Live demo shows the PC and the phone side by side in one window. PC shortcuts: P = pay ·
         T = +30 min · G = games · E = end · F = fast-forward · R = reset
       </p>
     </main>
