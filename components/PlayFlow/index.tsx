@@ -11,6 +11,7 @@ import {
   resetFromUrl,
   startSession,
   subscribe,
+  setPaying,
   type Session,
 } from "@/lib/session";
 import { playtimeOptions } from "@/data/playtimeOptions";
@@ -43,6 +44,16 @@ export default function PlayFlow({ station }: { station: Station }) {
       setStep("active");
     }
   }, [station.code]);
+
+  // Tell the PC "phone connected, waiting for payment" while choosing time and paying
+  useEffect(() => {
+    const inCheckout = !session && (step === "pick" || step === "checkout");
+    setPaying(station.code, inCheckout);
+    if (!inCheckout) return;
+    const leave = () => setPaying(station.code, false);
+    window.addEventListener("pagehide", leave);
+    return () => window.removeEventListener("pagehide", leave);
+  }, [step, session, station.code]);
 
   // Listen for changes from the PC tab (fast-forward, +time, end) so both timers match
   const sessionRef = useRef(session);

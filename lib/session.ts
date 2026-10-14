@@ -78,7 +78,7 @@ export function endSession(code: string) {
 export function subscribe(code: string, cb: (s: Session | null) => void) {
   const ch = new BroadcastChannel(CHANNEL);
   ch.onmessage = (e) => {
-    if (e.data?.code === code && e.data.from !== TAB_ID) cb(e.data.session);
+    if (e.data?.kind !== "paying" && e.data?.code === code && e.data.from !== TAB_ID) cb(e.data.session);
   };
   return () => ch.close();
 }
@@ -98,6 +98,9 @@ export function resetAllSessions() {
         localStorage.removeItem(k);
         broadcast(k.replace("gs-session-", ""), null);
       });
+    Object.keys(localStorage)
+      .filter((k) => k.startsWith("gs-paying-"))
+      .forEach((k) => localStorage.removeItem(k));
   } catch {
     // storage unavailable – nothing to clear
   }
@@ -123,4 +126,35 @@ export function setRemaining(code: string, msLeft: number): Session | null {
   const session: Session = { ...current, endsAt, startedAt: endsAt - current.totalMinutes * minuteMs() };
   save(session);
   return session;
+}
+
+// ---- "Phone connected, waiting for payment" (PC shows PAYING while the phone is in checkout) ----
+const payingKey = (code: string) => `gs-paying-${code}`;
+const PAYING_MAX_AGE = 10 * 60_000; // ignore stale flags (phone closed without leaving)
+
+export function setPaying(code: string, paying: boolean) {
+  try {
+    if (paying) localStorage.setItem(payingKey(code), String(Date.now()));
+    else localStorage.removeItem(payingKey(code));
+  } catch {}
+  const ch = new BroadcastChannel(CHANNEL);
+  ch.postMessage({ code, paying, from: TAB_ID, kind: "paying" });
+  ch.close();
+}
+
+export function getPaying(code: string): boolean {
+  try {
+    const at = Number(localStorage.getItem(payingKey(code)));
+    return !!at && Date.now() - at < PAYING_MAX_AGE;
+  } catch {
+    return false;
+  }
+}
+
+export function subscribePaying(code: string, cb: (paying: boolean) => void) {
+  const ch = new BroadcastChannel(CHANNEL);
+  ch.onmessage = (e) => {
+    if (e.data?.kind === "paying" && e.data.code === code && e.data.from !== TAB_ID) cb(e.data.paying);
+  };
+  return () => ch.close();
 }

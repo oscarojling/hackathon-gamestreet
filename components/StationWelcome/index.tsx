@@ -20,16 +20,13 @@ const INFO: { icon: IconName; title: string; sub: string }[] = [
 ];
 
 // PC screen 1: available + QR ("Game on?")
-export default function StationWelcome({ station }: { station: Station }) {
+export default function StationWelcome({ station, paying = false }: { station: Station; paying?: boolean }) {
   const cheapest = playtimeOptions[0];
 
   return (
     <div className="flex h-full flex-col px-[5vw] py-[4vh]">
-      <header className="flex items-center justify-between">
+      <header className="flex items-center">
         <Logo />
-        <div className="w-[420px]">
-          <StatusChip station={station} status="available" size="lg" />
-        </div>
       </header>
 
       <main className="grid flex-1 grid-cols-2 items-center gap-[4vw]">
@@ -48,13 +45,16 @@ export default function StationWelcome({ station }: { station: Station }) {
         </div>
 
         <div className="flex flex-col items-center gap-3">
-          <StationQR code={station.code} size={240} />
+          <div className="mb-3 w-[min(420px,100%)]">
+            <StatusChip station={station} status={paying ? "paying" : "available"} size="lg" />
+          </div>
+          <StationQR code={station.code} size={240} waiting={paying} />
           <p className="font-display text-4xl tracking-wide uppercase">Scan to play</p>
           <p className="text-offwhite/80">Choose your time. Pay. Start playing.</p>
         </div>
       </main>
 
-      <ol className="mx-auto flex items-center gap-6">
+      <ol className="flex w-full items-center justify-center gap-6">
         {STEPS.map((step, i) => (
           <li key={step.title} className="flex items-center gap-6">
             <span className="flex items-center gap-3">
@@ -71,7 +71,7 @@ export default function StationWelcome({ station }: { station: Station }) {
         ))}
       </ol>
 
-      <ul className="mx-auto mt-6 flex divide-x divide-offwhite/15 rounded-2xl border border-offwhite/10 bg-surface/80 py-4 backdrop-blur">
+      <ul className="mt-6 flex self-center divide-x divide-offwhite/15 rounded-2xl border border-offwhite/10 bg-surface/80 py-4 backdrop-blur">
         {INFO.map((item) => (
           <li key={item.title} className="flex items-center gap-3 px-8">
             <Icon name={item.icon} className="size-7 text-purple" />

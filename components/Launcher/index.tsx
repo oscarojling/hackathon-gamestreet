@@ -11,72 +11,55 @@ import { URGENT_MINUTES } from "@/lib/thresholds";
 import Icon, { type IconName } from "@/components/Icon";
 import GameCovers from "@/components/GameCovers";
 import SpeedMarks from "@/components/SpeedMarks";
-import PixelArt, { BURGER, CROWN, QUESTION, TROPHY } from "@/components/PixelArt";
 
-type TileProps = { icon: IconName; title: string; sub: string; art?: ReactNode; artLeft?: boolean };
+type TileProps = { icon: IconName; title: string; sub: string; badge?: IconName; tall?: boolean };
 
-function ArrowDot() {
+function Tile({ icon, title, sub, badge, tall }: TileProps) {
   return (
-    <span className="grid size-10 shrink-0 place-items-center rounded-full border border-offwhite/15 bg-night text-offwhite transition group-hover:border-purple group-hover:text-purple">
-      <Icon name="arrow" className="size-4" />
-    </span>
-  );
-}
-
-function Tile({ icon, title, sub, art, artLeft }: TileProps) {
-  return (
-    <div className="group relative flex items-center gap-4 overflow-hidden rounded-2xl border border-offwhite/10 bg-surface p-5 transition hover:border-purple/70">
-      {art && artLeft ? art : <Icon name={icon} className="size-9 shrink-0 text-purple" />}
+    <div
+      className={`group relative flex items-center gap-4 overflow-hidden rounded-2xl border border-offwhite/10 bg-surface/90 p-5 backdrop-blur transition hover:border-purple/70 ${
+        tall ? "h-full" : ""
+      }`}
+    >
+      <Icon name={icon} className="size-10 shrink-0 text-purple" />
       <span className="flex-1">
         <span className="block font-display text-lg tracking-wide uppercase">{title}</span>
         <span className="block text-xs leading-snug text-offwhite/70">{sub}</span>
       </span>
-      {art && !artLeft && art}
-      <ArrowDot />
+      {badge && <Icon name={badge} className="absolute top-3 right-14 size-6 text-purple/70" />}
+      <span className="grid size-9 shrink-0 place-items-center rounded-full border border-offwhite/15 bg-night text-offwhite transition group-hover:border-purple group-hover:text-purple">
+        <Icon name="arrow" className="size-4" />
+      </span>
     </div>
   );
 }
 
 const SIDE: TileProps[] = [
-  { icon: "globe", title: "Browser", sub: "Surf the web" },
-  { icon: "headphones", title: "Voice chat", sub: "Stay in touch with your friends" },
+  { icon: "globe", title: "Browser", sub: "Surf the web", tall: true },
+  { icon: "headphones", title: "Voice chat", sub: "Stay in touch with your friends", tall: true },
 ];
 
 const MORE: TileProps[] = [
-  {
-    icon: "food",
-    title: "Food & drinks",
-    sub: "Order in the lounge or see what's available",
-    artLeft: true,
-    art: (
-      <span className="flex items-center gap-2">
-        <PixelArt rows={BURGER} className="h-10 w-14" glow="#e8873a" />
-        <Icon name="food" className="size-7 text-purple" />
-      </span>
-    ),
-  },
-  {
-    icon: "trophy",
-    title: "Events & tournaments",
-    sub: "See what's happening at GameStreet",
-    art: (
-      <span className="flex flex-col items-center gap-0.5">
-        <PixelArt rows={CROWN} className="h-5 w-9" glow="var(--color-yellow)" />
-        <PixelArt rows={TROPHY} className="size-8" />
-      </span>
-    ),
-  },
-  {
-    icon: "help",
-    title: "Help",
-    sub: "Need assistance? Ask our staff or see FAQs",
-    art: (
-      <span className="grid size-12 place-items-center rounded-lg border-2 border-purple/70 bg-night">
-        <PixelArt rows={QUESTION} className="size-8" glow="var(--color-purple)" />
-      </span>
-    ),
-  },
+  { icon: "food", title: "Food & drinks", sub: "Order in the lounge or see what's available" },
+  { icon: "trophy", title: "Events & tournaments", sub: "See what's happening at GameStreet", badge: "crown" },
+  { icon: "help", title: "Help", sub: "Need assistance? Ask our staff or see FAQs" },
 ];
+
+const CORNER = ["P....", "PK...", ".PP..", "..PKP", "...PP"];
+
+function PixelCorner({ className }: { className: string }) {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 5 5" shapeRendering="crispEdges" className={`pointer-events-none absolute size-12 ${className}`}>
+      {CORNER.flatMap((row, y) =>
+        [...row].map((c, x) =>
+          c !== "." ? (
+            <rect key={`${x}-${y}`} x={x} y={y} width={1} height={1} fill={c === "K" ? "var(--color-pink)" : "var(--color-purple)"} />
+          ) : null,
+        ),
+      )}
+    </svg>
+  );
+}
 
 type Props = {
   station: Station;
@@ -93,7 +76,9 @@ export default function Launcher({ station, session, onOpenLibrary, onDemoAddTim
   const [popupOpen, setPopupOpen] = useState(false);
 
   return (
-    <div className="flex h-full flex-col gap-[3vh] px-[4vw] py-[4vh]">
+    <div className="relative flex h-full flex-col gap-[3vh] px-[4vw] py-[4vh]">
+      <PixelCorner className="bottom-3 left-3 -scale-y-100" />
+      <PixelCorner className="right-3 bottom-3 -scale-100" />
       <header className="relative flex items-center justify-between">
         <span className="flex items-center gap-6">
           <Logo />
@@ -121,11 +106,11 @@ export default function Launcher({ station, session, onOpenLibrary, onDemoAddTim
         )}
       </header>
 
-      <main className="grid flex-1 grid-cols-[1fr_1.7fr_1fr] gap-5">
+      <main className="grid min-h-0 flex-1 grid-cols-[1fr_1.5fr_1fr] gap-5">
         <div className="flex flex-col items-center justify-center text-center">
           <div className="relative">
             <SpeedMarks className="absolute -top-4 -left-8 size-12" direction="left" />
-            <h1 className="-rotate-6 font-display text-[6.5vw] leading-[0.85] text-yellow uppercase text-outline [text-shadow:0_0.06em_0_var(--color-purple)]">
+            <h1 className="-rotate-6 font-display text-[5.2vw] leading-[0.85] text-yellow uppercase text-outline [text-shadow:0_0.06em_0_var(--color-purple)]">
               Ready
               <br />
               <span className="text-lilac">to play?</span>
@@ -153,14 +138,14 @@ export default function Launcher({ station, session, onOpenLibrary, onDemoAddTim
           </span>
         </button>
 
-        <div className="flex flex-col justify-center gap-5">
+        <div className="grid grid-rows-2 gap-5">
           {SIDE.map((tile) => (
             <Tile key={tile.title} {...tile} />
           ))}
         </div>
       </main>
 
-      <section>
+      <section className="border-t border-offwhite/10 pt-5">
         <p className="mb-3 font-display text-sm tracking-widest text-lilac uppercase">More at GameStreet</p>
         <div className="grid grid-cols-3 gap-5">
           {MORE.map((tile) => (

@@ -13,6 +13,8 @@ import {
   minuteMs,
   startSession,
   subscribe,
+  getPaying,
+  subscribePaying,
   type Session,
 } from "@/lib/session";
 import { useNow } from "@/lib/useNow";
@@ -22,6 +24,7 @@ import Launcher from "@/components/Launcher";
 import { DemoButton } from "@/components/AddTimePopup";
 import GameOver from "@/components/GameOver";
 import Backdrop from "@/components/Backdrop";
+import Unlocking from "@/components/Unlocking";
 import DemoControls, { SKIPS, skipMs } from "@/components/DemoControls";
 
 // The PC screen: QR (available) → launcher → in-game → game over → QR again
@@ -29,6 +32,22 @@ export default function StationFlow({ station }: { station: Station }) {
   const [session, setSession] = useState<Session | null>(null);
   const [over, setOver] = useState(false);
   const [view, setView] = useState<"launcher" | "game">("launcher");
+  const [paying, setPayingState] = useState(false);
+  const [unlocking, setUnlocking] = useState(false);
+
+  // After a new payment: show "Unlocking…" for a moment, then the dashboard
+  function unlock() {
+    setPayingState(false);
+    setView("launcher");
+    setUnlocking(true);
+    setTimeout(() => setUnlocking(false), 2500);
+  }
+
+  // Phone connected → PAYING + "waiting for payment" on the QR
+  useEffect(() => {
+    setPayingState(getPaying(station.code));
+    return subscribePaying(station.code, setPayingState);
+  }, [station.code]);
   const now = useNow();
 
   // Pick up an existing session, and listen for payments from the phone
@@ -40,7 +59,7 @@ export default function StationFlow({ station }: { station: Station }) {
     return subscribe(station.code, (next) => {
       setSession((prev) => {
         if (prev && !next) setOver(true); // phone pressed "End session"
-        if (!prev && next) setView("launcher"); // new payment → launcher first
+        if (!prev && next) setTimeout(unlock, 0); // new payment → unlocking → launcher
         return next;
       });
       if (next) setOver(false);
@@ -66,7 +85,7 @@ export default function StationFlow({ station }: { station: Station }) {
       if (key === "p" && !playing) {
         setSession(startSession(station.code, 60, 100));
         setOver(false);
-        setView("launcher");
+        unlock();
       } else if (key === "t" && playing) {
         setSession(extendSession(station.code, 30, 50));
       } else if (key === "g" && playing) {
@@ -80,6 +99,8 @@ export default function StationFlow({ station }: { station: Station }) {
         resetAllSessions();
         setSession(null);
         setOver(false);
+        setPayingState(false);
+        setUnlocking(false);
         setView("launcher");
       } else if (key === "e" && playing) {
         endSession(station.code);
@@ -92,13 +113,15 @@ export default function StationFlow({ station }: { station: Station }) {
   }, [playing, session, station.code]);
 
   // Which screen is showing – used as a key so each change animates in
-  const screenKey = playing ? view : over ? "over" : "welcome";
+  const screenKey = playing ? (unlocking ? "unlocking" : view) : over ? "over" : "welcome";
 
   return (
     <div className="relative isolate h-dvh w-full overflow-hidden">
       <Backdrop variant={(playing && view === "game") || over ? "game" : "lounge"} dim={over && !playing} />
       <div key={screenKey} className="h-full motion-safe:animate-screen-in">
-      {playing && session && view === "launcher" ? (
+      {playing && unlocking ? (
+        <Unlocking station={station} />
+      ) : playing && session && view === "launcher" ? (
         <Launcher
           station={station}
           session={session}
@@ -116,13 +139,13 @@ export default function StationFlow({ station }: { station: Station }) {
         <GameOver onNewSession={() => setOver(false)} />
       ) : (
         <>
-          <StationWelcome station={station} />
+          <StationWelcome station={station} paying={paying} />
           <div className="absolute right-4 bottom-4">
             <DemoButton
               onClick={() => {
                 setSession(startSession(station.code, 60, 100));
                 setOver(false);
-                setView("launcher");
+                unlock();
               }}
             >
               Simulate scan &amp; pay (60 min)

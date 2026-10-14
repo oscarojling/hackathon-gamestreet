@@ -125,7 +125,7 @@ export default function Checkout({ station, option, mode = "start", initialMetho
       {status === "failed" && <Alert tone="error" title="Something went wrong." sub="Please try again or pick another method." />}
 
       {processing && (
-        <PaymentOverlay method={method} amount={option.price} phase={status === "paid" ? "done" : "waiting"} />
+        <PaymentOverlay method={method} amount={option.price} stationLabel={`${station.name} · ${station.code}`} phase={status === "paid" ? "done" : "waiting"} />
       )}
 
       <div className="mt-auto flex flex-col gap-3">

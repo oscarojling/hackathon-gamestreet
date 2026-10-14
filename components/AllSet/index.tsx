@@ -20,7 +20,7 @@ export default function AllSet({ station, session, onDone }: Props) {
   return (
     <PhoneScreen station={station} status="active">
       <Confetti />
-      <Alert tone="success" title="Payment successful!" />
+      <Alert tone="success" title="Payment successful!" autoHideMs={3500} />
       <ScreenTitle sub="Your playtime is ready. Head to your gaming station!">
         You&apos;re
         <br />

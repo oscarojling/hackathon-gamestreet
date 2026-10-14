@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import Icon, { type IconName } from "@/components/Icon";
 
 type Tone = "success" | "info" | "warning" | "error";
@@ -17,12 +17,18 @@ type Props = {
   title: string;
   sub?: string;
   dismissible?: boolean;
+  autoHideMs?: number; // fade away by itself after this long
   children?: ReactNode; // e.g. an action button under the text
 };
 
 // "Alerts & messages" from the UX component sheet
-export default function Alert({ tone, title, sub, dismissible = true, children }: Props) {
+export default function Alert({ tone, title, sub, dismissible = true, autoHideMs, children }: Props) {
   const [open, setOpen] = useState(true);
+  useEffect(() => {
+    if (!autoHideMs) return;
+    const id = setTimeout(() => setOpen(false), autoHideMs);
+    return () => clearTimeout(id);
+  }, [autoHideMs]);
   if (!open) return null;
   const t = TONES[tone];
 
