@@ -1,13 +1,16 @@
 # GameStreet – Scan. Pay. Play.
 
-**Live demo**
+## ▶️ Live demo: **[gamestreet-mobile.vercel.app/demo](https://gamestreet-mobile.vercel.app/demo)**
+
+Click **Start live demo**: the phone opens in a small window and the PC screen in your tab. Pay on the phone and watch the PC unlock.
 
 | | Link |
 |---|---|
-| 🖥️ PC screen (gaming station) | **[gamestreet-desktop.vercel.app](https://gamestreet-desktop.vercel.app/station/07)** |
-| 📱 Phone (scan & pay) | **[gamestreet-mobile.vercel.app](https://gamestreet-mobile.vercel.app/play/07)** |
+| ▶️ Live demo (phone + PC, synced) | **[gamestreet-mobile.vercel.app/demo](https://gamestreet-mobile.vercel.app/demo)** |
+| 🖥️ PC screen (gaming station) | [gamestreet-desktop.vercel.app](https://gamestreet-desktop.vercel.app/station/07) |
+| 📱 Phone (scan & pay) | [gamestreet-mobile.vercel.app](https://gamestreet-mobile.vercel.app/play/07) |
 
-> Open the PC screen on a laptop and scan the QR code with your phone.
+> Real-device test: open the PC screen on a laptop and scan the QR code with your phone.
 
 Built for the **Futuregames Customer Growth Hackathon 2026**, case: **GameStreet**.
 
@@ -36,22 +39,31 @@ Game on? (QR) → Ready to play? (dashboard) → In-game timer overlay with add-
 
 ## How to demo
 
-Locally, `localhost:3000` has a **Start live demo** button. It opens the phone in its own window and the PC screen in the current tab.
-Because both run in the same browser, paying on the phone unlocks the PC live.
+1. Open **[/demo](https://gamestreet-mobile.vercel.app/demo)** (or `localhost:3000` when running locally).
+2. Click **Start live demo**. It clears old sessions, opens the phone (`/play/07`) in a phone-sized pop-up and the PC screen (`/station/07`) in the current tab. Allow pop-ups if nothing opens.
+3. Put the windows side by side and share your **entire screen** in the call.
+4. Pay on the phone → the PC unlocks. Everything you do on one side updates the other within a second.
 
-The two Vercel sites are separate, so they don't sync with each other. Use these on the PC screen:
+Why the mobile site? Phone and PC sync through the browser (`localStorage` + `BroadcastChannel`), which only works when both pages are on the **same site**. The separate desktop and mobile deployments can't talk to each other without a backend.
 
-| Shortcut | Does |
+**Keyboard shortcuts** (click the PC window first):
+
+| Key | Does |
 |---|---|
 | `P` | Simulate scan & pay (60 min) |
+| `F` | Fast-forward: 10 min left → 5 min left → ends in 10 s |
 | `T` | Add 30 min |
 | `G` | Switch between dashboard and game |
 | `E` | End the session |
+| `R` | Reset everything to the start |
 
-URL tricks (both sites):
+There is also a small **⏩ Fast-forward** panel in the bottom-left corner of the PC screen while a session is running.
 
-- `?fast` – one minute lasts one second, so you see the warning, game over and receipt quickly
-- `?fail` – the first payment fails, to show the retry state
+**URL tricks** (both sites):
+
+- `?reset` – clear all sessions and start from the beginning
+- `?fast` – one minute lasts one second
+- `?fail` – the first payment fails, to show the error state
 
 ## Tech
 
@@ -64,7 +76,8 @@ URL tricks (both sites):
 
 ```
 app/
-  page.tsx               demo start page (redirects on Vercel via NEXT_PUBLIC_APP)
+  page.tsx               start page (redirects on Vercel via NEXT_PUBLIC_APP)
+  demo/                  demo start page with "Start live demo" (never redirects)
   play/[code]/           phone flow
   station/[code]/        PC screen
 components/              one folder per component: Name/index.tsx
