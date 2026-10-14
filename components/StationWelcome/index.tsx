@@ -22,7 +22,7 @@ const INFO: { icon: IconName; title: string; sub: string }[] = [
 // Big station chip shown above the QR ("Station · Glitch · 07 · Available / Paying")
 function StationChip({ station, paying }: { station: Station; paying: boolean }) {
   return (
-    <div className="flex items-center gap-5 rounded-2xl border border-offwhite/10 bg-surface/90 px-6 py-4 backdrop-blur">
+    <div className="flex items-center gap-5 rounded-2xl border border-purple/20 bg-[#1c1a44]/85 px-6 py-4 backdrop-blur">
       <Icon name="gamepad" className="size-11" />
       <span className="leading-none">
         <span className="block text-[13px] font-semibold tracking-[0.15em] text-lilac uppercase">Station</span>

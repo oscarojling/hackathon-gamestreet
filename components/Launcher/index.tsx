@@ -25,7 +25,7 @@ type TileProps = { icon: IconName; title: string; sub: string; badge?: IconName 
 // Right-column tile (Browser, Voice chat): tall, content centred vertically
 function SideTile({ icon, title, sub }: TileProps) {
   return (
-    <div className="group flex items-center gap-6 rounded-2xl border border-offwhite/10 bg-surface/90 px-7 transition hover:border-purple/70">
+    <div className="group flex items-center gap-6 rounded-2xl border border-purple/20 bg-[#1c1a44]/85 px-7 transition hover:border-purple/70">
       <Icon name={icon} className="size-[58px] shrink-0" />
       <span className="flex-1 leading-tight">
         <span className="block font-display text-[24px] tracking-wide whitespace-nowrap uppercase">{title}</span>
@@ -39,7 +39,7 @@ function SideTile({ icon, title, sub }: TileProps) {
 // Bottom-row tile (Food & drinks, Events, Help)
 function MoreTile({ icon, title, sub, badge }: TileProps) {
   return (
-    <div className="group relative flex items-center gap-5 rounded-2xl border border-offwhite/10 bg-surface/90 px-7 transition hover:border-purple/70">
+    <div className="group relative flex items-center gap-5 rounded-2xl border border-purple/20 bg-[#1c1a44]/85 px-7 transition hover:border-purple/70">
       <Icon name={icon} className="size-[54px] shrink-0" />
       <span className="flex-1 leading-tight">
         <span className="block font-display text-[22px] tracking-wide uppercase">{title}</span>
@@ -51,18 +51,20 @@ function MoreTile({ icon, title, sub, badge }: TileProps) {
   );
 }
 
-const CORNER = ["P....", "PK...", ".PP..", "..PKP", "...PP"];
-
-function PixelCorner({ className }: { className: string }) {
+// Pixel staircases from the UX frame: ╲ (pink, bottom-left), ╱ (purple, bottom-right), small ╲ top-left
+function PixelSteps({ dir, count, color, size, className }: { dir: "down" | "up"; count: number; color: string; size: number; className: string }) {
   return (
-    <svg aria-hidden="true" viewBox="0 0 5 5" shapeRendering="crispEdges" className={`pointer-events-none absolute size-[60px] ${className}`}>
-      {CORNER.flatMap((row, y) =>
-        [...row].map((c, x) =>
-          c !== "." ? (
-            <rect key={`${x}-${y}`} x={x} y={y} width={1} height={1} fill={c === "K" ? "var(--color-pink)" : "var(--color-purple)"} />
-          ) : null,
-        ),
-      )}
+    <svg
+      aria-hidden="true"
+      width={count * size}
+      height={count * size}
+      viewBox={`0 0 ${count} ${count}`}
+      shapeRendering="crispEdges"
+      className={`pointer-events-none absolute ${className}`}
+    >
+      {Array.from({ length: count }, (_, i) => (
+        <rect key={i} x={i} y={dir === "down" ? i : count - 1 - i} width={1} height={1} fill={color} />
+      ))}
     </svg>
   );
 }
@@ -83,8 +85,9 @@ export default function Launcher({ station, session, onOpenLibrary, onDemoAddTim
 
   return (
     <div className="relative flex h-full flex-col px-[64px] pt-[48px] pb-[56px]">
-      <PixelCorner className="bottom-5 left-5 -scale-y-100" />
-      <PixelCorner className="right-5 bottom-5 -scale-100" />
+      <PixelSteps dir="down" count={4} size={16} color="var(--color-pink)" className="bottom-6 left-5" />
+      <PixelSteps dir="up" count={5} size={16} color="var(--color-purple)" className="right-5 bottom-8" />
+      <PixelSteps dir="down" count={3} size={13} color="var(--color-purple)" className="top-[226px] left-6" />
 
       {/* Header */}
       <header className="relative flex h-[88px] items-center justify-between">
@@ -103,7 +106,7 @@ export default function Launcher({ station, session, onOpenLibrary, onDemoAddTim
         </span>
 
         <div
-          className={`flex items-center gap-5 rounded-2xl border bg-surface/90 py-3 pr-3 pl-6 backdrop-blur ${
+          className={`flex items-center gap-5 rounded-2xl border bg-[#1c1a44]/85 py-3 pr-3 pl-6 backdrop-blur ${
             urgent ? "border-red/70" : "border-offwhite/10"
           }`}
           role="timer"
@@ -150,7 +153,7 @@ export default function Launcher({ station, session, onOpenLibrary, onDemoAddTim
           className="group relative overflow-hidden rounded-2xl border border-offwhite/10 text-left transition hover:border-purple hover:shadow-[0_0_30px_color-mix(in_srgb,var(--color-purple)_40%,transparent)]"
         >
           <GameCovers />
-          <span className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-surface via-surface/80 to-transparent" />
+          <span className="absolute inset-x-0 bottom-0 h-[55%] bg-gradient-to-t from-[#1c1a44] via-[#1c1a44]/80 to-transparent" />
           <span className="absolute inset-x-7 bottom-7 flex items-center gap-5">
             <span className="grid size-[64px] place-items-center rounded-full border-2 border-offwhite/10 bg-night/60">
               <Icon name="gamepad" className="size-9" />
