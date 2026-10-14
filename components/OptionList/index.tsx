@@ -94,13 +94,15 @@ export default function OptionList({
             }`}
           >
             {input}
-            <Icon name="clock" className={`size-6 shrink-0 ${on ? "text-offwhite" : "text-purple"}`} />
+            <span className={`grid size-10 shrink-0 place-items-center rounded-full ${on ? "bg-offwhite/20" : "bg-offwhite/[0.07]"}`}>
+              <Icon name="clock" className="size-6 text-offwhite" />
+            </span>
             <span className="flex-1">
               <span className="block font-display text-lg leading-tight">
                 {prefix}
                 {option.minutes} MIN
               </span>
-              <span className="block text-xs opacity-70">{labels?.[option.id] ?? option.label}</span>
+              <span className="block text-xs whitespace-nowrap opacity-70">{labels?.[option.id] ?? option.label}</span>
             </span>
             <span className={`h-9 w-px ${on ? "bg-offwhite/30" : "bg-offwhite/15"}`} />
             <span className="w-[70px] text-right font-display text-lg">{option.price} KR</span>

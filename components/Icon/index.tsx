@@ -56,7 +56,18 @@ export default function Icon({ name, className = "size-5" }: { name: IconName; c
       />
     );
   }
-  if (ASSETS.has(name) && !TINTED.test(className)) {
+  if (ASSETS.has(name) && TINTED.test(className)) {
+    // designer icon in another colour: its strokes (public/icons/mask) as a mask
+    const url = `url(/icons/mask/${name}.png)`;
+    return (
+      <span
+        aria-hidden="true"
+        className={`inline-block shrink-0 bg-current ${className}`}
+        style={{ maskImage: url, WebkitMaskImage: url, maskSize: "contain", WebkitMaskSize: "contain", maskRepeat: "no-repeat", WebkitMaskRepeat: "no-repeat", maskPosition: "center", WebkitMaskPosition: "center" }}
+      />
+    );
+  }
+  if (ASSETS.has(name)) {
     // eslint-disable-next-line @next/next/no-img-element
     return <img src={`/icons/${name}.png`} alt="" aria-hidden="true" className={`${className} object-contain`} />;
   }

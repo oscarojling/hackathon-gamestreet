@@ -13,15 +13,16 @@ const PALETTE: Record<string, string> = {
 };
 
 export const TROPHY = [
-  ".YYYYYYYYY.",
-  "YYYYYYYYYYY",
-  "Y.YYYYYYY.Y",
-  "Y.YYYYYYY.Y",
-  ".YYYYYYYYY.",
   "..YYYYYYY..",
+  "YYYYYY..YYY",
+  "Y.YYYY..Y.Y",
+  "Y.YYYYY.Y.Y",
+  "YYYYYY..YYY",
+  "..YYYY.YY..",
+  "...YYYYY...",
   "....YYY....",
-  ".....Y.....",
   "....YYY....",
+  "...YYYYY...",
   "..YYYYYYY..",
 ];
 

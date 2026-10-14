@@ -20,7 +20,7 @@ export default function PhoneHeader({ station, status = "available", statusNote,
           <button
             onClick={onBack}
             aria-label="Back"
-            className="absolute left-0 grid size-10 place-items-center rounded-xl text-purple hover:bg-surface"
+            className="absolute left-0 grid size-10 place-items-center rounded-xl text-offwhite hover:bg-surface"
           >
             <Icon name="back" className="size-6" />
           </button>

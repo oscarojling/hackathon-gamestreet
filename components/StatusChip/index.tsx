@@ -20,11 +20,13 @@ export default function StatusChip({ station, status, note, size = "sm" }: Props
         size === "lg" ? "gap-5 px-6 py-3.5 text-lg" : "gap-3 px-4 py-3 text-[15px]"
       }`}
     >
-      <Icon name="gamepad" className={`${size === "lg" ? "size-7" : "size-7"}`} />
-      <span className={`font-display tracking-wide uppercase ${size === "lg" ? "text-2xl" : "text-[19px]"}`}>
-        {station.name} <span className="text-purple">· {station.code}</span>
+      <span className={`flex shrink-0 items-center ${size === "lg" ? "gap-5" : "w-[54%] gap-3"}`}>
+        <Icon name="gamepad" className="size-7" />
+        <span className={`font-display tracking-wide whitespace-nowrap uppercase ${size === "lg" ? "text-2xl" : "text-[19px]"}`}>
+          {station.name} <span className="text-purple">· {station.code}</span>
+        </span>
       </span>
-      <span className="h-6 w-px bg-offwhite/20" />
+      <span className="h-7 w-px shrink-0 bg-offwhite/20" />
       <span className="ml-auto flex flex-col items-start leading-tight">
         <span className={`flex items-center gap-2 font-display tracking-wide uppercase ${ended ? "text-offwhite/55" : paying ? "text-yellow" : "text-green"}`}>
           <span

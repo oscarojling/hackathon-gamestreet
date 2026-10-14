@@ -19,11 +19,11 @@ type Props = {
 export default function PlaytimePicker({ station, selected, onSelect, onContinue }: Props) {
   return (
     <PhoneScreen station={station} status="available">
-      <ScreenTitle sub="Choose your playtime." image="how-long" alt="How long will you play?" height={120} />
+      <ScreenTitle sub="Choose your playtime." image="how-long" subAlign="left" alt="How long will you play?" height={150} />
 
       <OptionList options={playtimeOptions} selected={selected} onSelect={onSelect} />
 
-      <div className="mt-auto flex flex-col gap-2">
+      <div className="flex flex-col gap-3">
         <Button onClick={onContinue}>Continue – {selected.price} kr</Button>
         <p className="flex items-center justify-center gap-1.5 text-xs text-offwhite/60">
           <Icon name="lock" className="size-3.5" /> No app. No account. Just play.

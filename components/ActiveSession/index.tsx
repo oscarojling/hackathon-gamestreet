@@ -42,7 +42,7 @@ export default function ActiveSession({ station, session, addedMinutes, justPaid
         </>
       )}
       {!urgent && (
-        <ScreenTitle image="your-session" alt="Your session" height={92} />
+        <ScreenTitle image="your-session" alt="Your session" height={84} />
       )}
 
       <Countdown
@@ -61,6 +61,7 @@ export default function ActiveSession({ station, session, addedMinutes, justPaid
 
       <InfoRows
         title="Session details"
+        iconTone="white"
         rows={[
           { icon: "clock", label: "Purchased time", value: `${session.totalMinutes} min` },
           { icon: "card", label: "Amount paid", value: `${session.totalPaid} kr` },

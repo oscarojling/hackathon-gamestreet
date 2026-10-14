@@ -13,9 +13,9 @@ import Button from "@/components/Button";
 import Icon from "@/components/Icon";
 
 const EXTEND_LABELS: Record<string, string> = {
-  "30": "A little more time",
-  "60": "More time, more fun",
-  "120": "Maximum playtime",
+  "30": "A little more time.",
+  "60": "More time, more fun.",
+  "120": "Maximum playtime.",
 };
 
 type Props = {
@@ -45,14 +45,14 @@ export default function AddTime({ station, session, onBack, onContinue }: Props)
 
       <dl className="grid grid-cols-2 divide-x divide-offwhite/10 rounded-2xl border border-offwhite/10 bg-surface p-4">
         <div className="flex items-center gap-3 pr-3">
-          <Icon name="card" className="size-6 text-purple" />
+          <Icon name="card" className="size-7 text-purple" />
           <div>
             <dt className="text-[10px] tracking-wider text-lilac uppercase">Total amount</dt>
             <dd className="font-display text-lg">{selected.price} KR</dd>
           </div>
         </div>
         <div className="pl-4">
-          <dt className="text-[10px] tracking-wider text-lilac uppercase">New session end time</dt>
+          <dt className="text-xs text-lilac">New session end time</dt>
           <dd className="font-display text-lg">{formatClock(newEndsAt)}</dd>
         </div>
       </dl>

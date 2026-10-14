@@ -20,10 +20,11 @@ type Props = {
   height?: number; // image height in px
   children?: ReactNode; // text fallback
   sub?: string;
+  subAlign?: "center" | "left";
 };
 
 // Big tilted headline – uses the designer's title artwork when given
-export default function ScreenTitle({ kicker, image, alt, height = 112, children, sub }: Props) {
+export default function ScreenTitle({ kicker, image, alt, height = 112, children, sub, subAlign = "center" }: Props) {
   return (
     <div className="text-center">
       {kicker && <p className="font-display text-xs tracking-widest text-lilac uppercase">{kicker}</p>}
@@ -39,7 +40,7 @@ export default function ScreenTitle({ kicker, image, alt, height = 112, children
           <SpeedMarks className="absolute -top-2 -right-9 size-9" direction="right" />
         </div>
       )}
-      {sub && <p className="mt-3 text-sm text-offwhite/80">{sub}</p>}
+      {sub && <p className={`mt-2 text-[15px] text-offwhite/85 ${subAlign === "left" ? "text-left" : ""}`}>{sub}</p>}
     </div>
   );
 }
