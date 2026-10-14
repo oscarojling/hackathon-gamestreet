@@ -27,7 +27,7 @@ export default function Countdown({ remainingMs, totalMs, endsAt, warning, note 
 
   return (
     <div
-      className={`rounded-2xl border bg-surface px-5 py-5 text-center ${
+      className={`rounded-2xl border bg-surface px-5 py-4 text-center ${
         "border-offwhite/10"
       }`}
     >
@@ -36,7 +36,7 @@ export default function Countdown({ remainingMs, totalMs, endsAt, warning, note 
       ) : (
         <p className="font-display text-[11px] tracking-[0.2em] text-lilac uppercase">Time left</p>
       )}
-      <div className="my-1 flex items-center justify-center gap-2">
+      <div className="flex items-center justify-center gap-2">
         {warning && <AlarmMarks />}
         <p
           role="timer"
@@ -46,7 +46,7 @@ export default function Countdown({ remainingMs, totalMs, endsAt, warning, note 
         </p>
         {warning && <AlarmMarks flip />}
       </div>
-      <div className="mx-auto mt-3 h-2.5 w-5/6 overflow-hidden rounded-full bg-night">
+      <div className="mx-auto mt-2 h-2.5 w-5/6 overflow-hidden rounded-full bg-night">
         <div
           className={`h-full rounded-full transition-[width] duration-1000 ease-linear ${warning ? "bg-red" : "bg-purple"}`}
           style={{ width: `${progress * 100}%` }}

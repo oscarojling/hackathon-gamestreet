@@ -42,7 +42,7 @@ export default function ActiveSession({ station, session, addedMinutes, justPaid
         </>
       )}
       {!urgent && (
-        <ScreenTitle image="your-session" alt="Your session" height={84} />
+        <ScreenTitle image="your-session" alt="Your session" height={72} />
       )}
 
       <Countdown

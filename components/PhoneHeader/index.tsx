@@ -14,7 +14,7 @@ type Props = {
 
 export default function PhoneHeader({ station, status = "available", statusNote, onBack }: Props) {
   return (
-    <header className="flex flex-col gap-3">
+    <header className="flex flex-col gap-2.5">
       <div className="relative flex items-center justify-center">
         {onBack && (
           <button

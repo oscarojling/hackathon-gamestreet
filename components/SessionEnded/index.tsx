@@ -43,14 +43,14 @@ export default function SessionEnded({ station, summary, onPlayAgain }: Props) {
       <div className="text-center">
         <div className="flex items-center justify-center gap-4">
           <Rays />
-          <PixelArt rows={TROPHY} className="size-20" />
+          <PixelArt rows={TROPHY} className="size-16" />
           <Rays flip />
         </div>
-        <h1 className="mt-3 flex justify-center">
+        <h1 className="mt-1 flex justify-center">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/titles/session-ended.png" alt="Session ended!" className="h-[96px] w-auto" />
+          <img src="/titles/session-ended.png" alt="Session ended!" className="h-[80px] w-auto" />
         </h1>
-        <p className="mt-2 text-lg text-lilac">Thanks for playing!</p>
+        <p className="mt-1 text-lg text-lilac">Thanks for playing!</p>
       </div>
 
       <InfoRows

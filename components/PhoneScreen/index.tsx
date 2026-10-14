@@ -15,7 +15,7 @@ const CORNER = ["P..", ".P.", "..P"]; // pixel staircase
 
 function PixelCorner({ flip }: { flip?: boolean }) {
   return (
-    <svg aria-hidden="true" viewBox="0 0 3 3" shapeRendering="crispEdges" className={`size-[42px] shrink-0 ${flip ? "-scale-x-100" : ""}`}>
+    <svg aria-hidden="true" viewBox="0 0 3 3" shapeRendering="crispEdges" className={`size-9 shrink-0 ${flip ? "-scale-x-100" : ""}`}>
       {CORNER.flatMap((row, y) =>
         [...row].map((c, x) =>
           c !== "." ? (
@@ -30,14 +30,14 @@ function PixelCorner({ flip }: { flip?: boolean }) {
 // Shared frame for every phone screen: header, content, "Eat · Drink · GS1 · Play · Repeat" footer
 export default function PhoneScreen({ station, status, statusNote, onBack, children }: Props) {
   return (
-    <section className="flex min-h-dvh flex-col gap-4 p-5 pb-3">
+    <section className="flex min-h-dvh flex-col gap-3 px-5 pt-2 pb-2 font-medium">
       <PhoneHeader station={station} status={status} statusNote={statusNote} onBack={onBack} />
       {children}
-      <footer className="mt-auto flex items-end justify-between pt-2">
+      <footer className="mt-auto flex items-end justify-between pt-1">
         <PixelCorner />
         <span className="flex items-center gap-3 font-display text-[11px] tracking-[0.2em] text-offwhite/60">
           <span>EAT · DRINK</span>
-          <GsBadge className="size-10" />
+          <GsBadge className="size-9" />
           <span>PLAY · REPEAT</span>
         </span>
         <PixelCorner flip />

@@ -55,7 +55,7 @@ export default function Checkout({ station, option, mode = "start", initialMetho
 
   return (
     <PhoneScreen station={station} status={mode === "start" ? "available" : "active"} onBack={processing ? undefined : onBack}>
-      <ScreenTitle kicker="Payment" sub="How would you like to pay?" image="choose-payment" alt="Choose payment method" height={112} />
+      <ScreenTitle kicker="Payment" sub="How would you like to pay?" image="choose-payment" alt="Choose payment method" height={100} />
 
       <dl className="grid grid-cols-2 divide-x divide-offwhite/10 rounded-2xl border border-offwhite/10 bg-surface p-4">
         <div className="flex items-center gap-3 pr-3">
@@ -84,7 +84,7 @@ export default function Checkout({ station, option, mode = "start", initialMetho
           return (
             <label
               key={m.id}
-              className={`flex items-center gap-3 rounded-2xl border-2 px-3 py-2.5 transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-yellow ${
+              className={`flex items-center gap-3 rounded-2xl border-2 px-3 py-2 transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-yellow ${
                 selected
                   ? "border-purple bg-purple shadow-[0_0_20px_var(--color-purple)]"
                   : "border-offwhite/10 bg-surface hover:border-offwhite/30"
