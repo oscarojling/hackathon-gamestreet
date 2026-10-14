@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { resetAllSessions } from "@/lib/session";
+import { formatClock, resetAllSessions } from "@/lib/session";
+import { useNow } from "@/lib/useNow";
 import Logo from "@/components/Logo";
 import Icon from "@/components/Icon";
 
 const PC = { src: "/station/07", w: 1440, h: 900 };
 const PHONE = { src: "/play/07", w: 390, h: 844 };
-const STATUS_BAR = 50; // fake iOS status bar (9:41) like in the UX frames
+const STATUS_BAR = 50; // iOS-style status bar like in the UX frames, with the real time
 const HOME_BAR = 30; // iOS home indicator area at the bottom
 
 // Scales a fixed-size iframe to fit its container (keeps the real layout, just smaller)
@@ -34,6 +35,12 @@ const CONTROLS = [
   { key: "g", label: "Dashboard / game", icon: "gamepad" },
   { key: "e", label: "End session", icon: "logout" },
 ] as const;
+
+// Real local time (HH:MM), like the clock in an iPhone's status bar
+function PhoneClock() {
+  const now = useNow();
+  return <span suppressHydrationWarning>{formatClock(now)}</span>;
+}
 
 // Signal, wifi and battery, drawn small like the iPhone status bar
 function StatusIcons() {
@@ -147,7 +154,7 @@ export default function LiveDemo() {
                   style={{ width: PHONE.w, height: PHONE.h, transform: `scale(${phone.scale})`, transformOrigin: "0 0" }}
                 >
                   <div className="flex items-center justify-between px-8 pt-1 text-[17px] font-semibold text-offwhite" style={{ height: STATUS_BAR }}>
-                    <span>9:41</span>
+                    <PhoneClock />
                     <StatusIcons />
                   </div>
                   <iframe key={`phone-${run}`} src={PHONE.src} title="Phone" style={{ width: PHONE.w, height: PHONE.h - STATUS_BAR - HOME_BAR }} />
