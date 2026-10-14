@@ -43,11 +43,18 @@ export default function PlayFlow({ station }: { station: Station }) {
   const finish = useCallback(() => {
     if (!session) return;
     const played = Math.min(Date.now(), session.endsAt) - session.startedAt;
-    setSummary({ playedMinutes: Math.max(1, Math.round(played / minuteMs())), totalPaid: session.totalPaid });
+    setSummary({
+      playedMinutes: Math.max(1, Math.round(played / minuteMs())),
+      totalMinutes: session.totalMinutes,
+      totalPaid: session.totalPaid,
+      method,
+      startedAt: session.startedAt,
+      endedAt: Date.now(),
+    });
     endSession(station.code);
     setSession(null);
     setStep("ended");
-  }, [session, station.code]);
+  }, [session, station.code, method]);
 
   let screen: React.ReactNode = null;
 
@@ -123,5 +130,11 @@ export default function PlayFlow({ station }: { station: Station }) {
   }
 
   // Phone-width column, centred on bigger screens
-  return <main className="mx-auto w-full max-w-md">{screen}</main>;
+  return (
+    <main className="mx-auto w-full max-w-md">
+      <div key={step} className="motion-safe:animate-screen-in">
+        {screen}
+      </div>
+    </main>
+  );
 }

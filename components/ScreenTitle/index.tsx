@@ -10,7 +10,7 @@ type Props = {
 export default function ScreenTitle({ kicker, children, sub }: Props) {
   return (
     <div className="text-center">
-      {kicker && <p className="text-xs font-bold uppercase tracking-widest text-mint">{kicker}</p>}
+      {kicker && <p className="text-xs font-bold uppercase tracking-widest text-green">{kicker}</p>}
       <div className="relative mx-auto mt-1 inline-block">
         <h1 className="-rotate-3 text-4xl leading-[0.9] font-black text-yellow uppercase italic [text-shadow:3px_3px_0_var(--color-night),5px_5px_0_var(--color-purple)]">
           {children}

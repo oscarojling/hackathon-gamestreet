@@ -1,17 +1,73 @@
 @import "tailwindcss";
 
-/* GameStreet design tokens: use as bg-night, text-pink, border-purple, etc. */
+/* GameStreet design tokens (UX colour palette): bg-night, text-pink, border-purple, etc. */
 @theme {
-  --color-night: #0b0d1a;
-  --color-surface: #1c2033;
-  --color-purple: #8549ff;
-  --color-pink: #ff65c8;
-  --color-yellow: #ffd02b;
-  --color-mint: #4ee7e0;
-  --color-offwhite: #f7f5fa;
+  --color-night: #080e26; /* Background */
+  --color-surface: #10192d; /* Subsections, cards */
+  --color-yellow: #fccd24; /* Primary CTA */
+  --color-offwhite: #f6f6fb; /* White text */
+  --color-pink: #fc42b7; /* Accent, logo */
+  --color-purple: #7632fa; /* Selected, glow */
+  --color-green: #01f39a; /* Active / available */
+  --color-red: #ff4276; /* Inactive, ended, end session */
+  --color-lilac: #c08bfc; /* Soft text, labels */
 }
 
 body {
   background: var(--color-night);
   color: var(--color-offwhite);
+}
+
+/* Tailwind v4 resets buttons to the default cursor – bring the hand back */
+@layer base {
+  button:not(:disabled),
+  [role="button"],
+  a,
+  label:has(input:not(:disabled)) {
+    cursor: pointer;
+  }
+}
+
+/* Screen transition: every new step slides in */
+@keyframes screen-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Pixel confetti */
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-10vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(105vh) rotate(540deg);
+    opacity: 0.8;
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@theme {
+  --animate-screen-in: screen-in 0.35s ease-out both;
+  --animate-confetti: confetti-fall 2.4s ease-in forwards;
+  --animate-pop: pop 0.4s ease-out both;
 }

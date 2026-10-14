@@ -1,4 +1,6 @@
 import type { Station } from "@/types";
+import type { PayMethod } from "@/components/Checkout";
+import EmailReceipt from "@/components/EmailReceipt";
 import PhoneScreen from "@/components/PhoneScreen";
 import InfoRows from "@/components/InfoRows";
 import Button from "@/components/Button";
@@ -6,7 +8,11 @@ import Icon from "@/components/Icon";
 
 export type SessionSummary = {
   playedMinutes: number;
+  totalMinutes: number; // bought
   totalPaid: number;
+  method: PayMethod;
+  startedAt: number;
+  endedAt: number;
 };
 
 type Props = {
@@ -38,12 +44,7 @@ export default function SessionEnded({ station, summary, onPlayAgain }: Props) {
         ]}
       />
 
-      {/* Fake for the prototype: no email is sent */}
-      <button className="flex items-center gap-3 rounded-2xl border border-offwhite/10 bg-surface px-4 py-3 text-sm">
-        <Icon name="mail" className="size-4 opacity-70" />
-        <span className="flex-1 text-left">Email me my receipt</span>
-        <Icon name="chevron" className="size-4 opacity-70" />
-      </button>
+      <EmailReceipt station={station} summary={summary} />
 
       <Button onClick={onPlayAgain} className="mt-auto">
         Play again

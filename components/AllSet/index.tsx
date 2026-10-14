@@ -4,6 +4,7 @@ import PhoneScreen from "@/components/PhoneScreen";
 import ScreenTitle from "@/components/ScreenTitle";
 import Button from "@/components/Button";
 import Icon from "@/components/Icon";
+import Confetti from "@/components/Confetti";
 
 type Props = {
   station: Station;
@@ -15,6 +16,7 @@ type Props = {
 export default function AllSet({ station, session, onDone }: Props) {
   return (
     <PhoneScreen station={station} status="active">
+      <Confetti />
       <ScreenTitle sub="Your playtime is ready. Head to your gaming station!">
         You&apos;re
         <br />
