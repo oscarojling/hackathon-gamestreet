@@ -17,13 +17,7 @@ import InGame from "@/components/InGame";
 import Launcher from "@/components/Launcher";
 import { DemoButton } from "@/components/AddTimePopup";
 import GameOver from "@/components/GameOver";
-
-// Backgrounds: drop the designers' images into /public with these names.
-// Until then the gradients underneath show instead.
-const LOUNGE_BG =
-  "url(/lounge-bg.jpg) center/cover, radial-gradient(ellipse at 20% 30%, #3a1d7a 0%, transparent 55%), radial-gradient(ellipse at 85% 80%, #6b1f5c 0%, transparent 50%), #080e26";
-const GAME_BG =
-  "url(/game-bg.jpg) center/cover, linear-gradient(180deg, #2b3a67 0%, #c9734a 55%, #3b2a2a 100%)";
+import Backdrop from "@/components/Backdrop";
 
 // The PC screen: QR (available) → launcher → in-game → game over → QR again
 export default function StationFlow({ station }: { station: Station }) {
@@ -86,10 +80,8 @@ export default function StationFlow({ station }: { station: Station }) {
   const screenKey = playing ? view : over ? "over" : "welcome";
 
   return (
-    <div
-      className="relative h-dvh w-full overflow-hidden"
-      style={{ background: (playing && view === "game") || over ? GAME_BG : LOUNGE_BG }}
-    >
+    <div className="relative isolate h-dvh w-full overflow-hidden">
+      <Backdrop variant={(playing && view === "game") || over ? "game" : "lounge"} />
       <div key={screenKey} className="h-full motion-safe:animate-screen-in">
       {playing && session && view === "launcher" ? (
         <Launcher

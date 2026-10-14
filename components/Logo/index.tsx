@@ -1,14 +1,27 @@
-// GameStreet wordmark with the pixel mark. size: "sm" for phone, "lg" for PC.
+// GameStreet wordmark with the pixel mark, styled like the UX asset sheet.
+const MARK = ["...P", "..P.", "PP.P", ".P.."]; // pixel staircase
+
 export default function Logo({ size = "lg" }: { size?: "sm" | "lg" }) {
-  const px = size === "lg" ? "size-2.5" : "size-1.5";
+  const px = size === "lg" ? 9 : 6;
   return (
-    <span className="flex items-center gap-3">
-      <span aria-hidden="true" className="grid grid-cols-3 gap-0.5">
-        <span className={px} /> <span className={px} /> <span className={`${px} bg-pink`} />
-        <span className={px} /> <span className={`${px} bg-purple`} /> <span className={`${px} bg-pink`} />
-        <span className={`${px} bg-purple`} /> <span className={`${px} bg-pink`} /> <span className={`${px} bg-purple`} />
-      </span>
-      <span className={`font-black tracking-tight text-pink ${size === "lg" ? "text-4xl" : "text-2xl"}`}>
+    <span className="flex items-center gap-2.5 drop-shadow-[0_0_10px_color-mix(in_srgb,var(--color-pink)_45%,transparent)]">
+      <svg
+        aria-hidden="true"
+        width={px * 4}
+        height={px * 4}
+        viewBox="0 0 4 4"
+        shapeRendering="crispEdges"
+        className="shrink-0"
+      >
+        {MARK.flatMap((row, y) =>
+          [...row].map((c, x) =>
+            c === "P" ? <rect key={`${x}-${y}`} x={x} y={y} width={1} height={1} fill="var(--color-pink)" /> : null,
+          ),
+        )}
+      </svg>
+      <span
+        className={`font-display leading-none text-pink text-outline ${size === "lg" ? "text-5xl" : "text-[28px]"}`}
+      >
         GameStreet
       </span>
     </span>

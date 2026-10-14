@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import SpeedMarks from "@/components/SpeedMarks";
 
 type Props = {
   kicker?: string; // small label above, e.g. "Payment"
@@ -6,22 +7,18 @@ type Props = {
   sub?: string;
 };
 
-// Chunky tilted headline in the GameStreet style, with neon "speed marks"
+// Chunky tilted headline with neon action marks, like the UX screens
 export default function ScreenTitle({ kicker, children, sub }: Props) {
   return (
     <div className="text-center">
-      {kicker && <p className="text-xs font-bold uppercase tracking-widest text-green">{kicker}</p>}
+      {kicker && <p className="font-display text-xs tracking-widest text-lilac uppercase">{kicker}</p>}
       <div className="relative mx-auto mt-1 inline-block">
-        <h1 className="-rotate-3 text-4xl leading-[0.9] font-black text-yellow uppercase italic [text-shadow:3px_3px_0_var(--color-night),5px_5px_0_var(--color-purple)]">
+        <h1 className="-rotate-3 font-display text-[44px] leading-[0.88] text-yellow uppercase text-outline [text-shadow:0_5px_0_var(--color-purple)]">
           {children}
         </h1>
-        <span aria-hidden="true" className="absolute -top-1 -right-5 flex flex-col gap-1">
-          <span className="h-1 w-4 -rotate-45 rounded-full bg-pink" />
-          <span className="h-1 w-5 rounded-full bg-purple" />
-          <span className="h-1 w-4 rotate-45 rounded-full bg-pink" />
-        </span>
+        <SpeedMarks className="absolute -top-2 -right-9 size-9" direction="right" />
       </div>
-      {sub && <p className="mt-3 text-sm opacity-75">{sub}</p>}
+      {sub && <p className="mt-3 text-sm text-offwhite/80">{sub}</p>}
     </div>
   );
 }

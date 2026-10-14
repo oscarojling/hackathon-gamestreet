@@ -4,7 +4,9 @@ import PhoneScreen from "@/components/PhoneScreen";
 import ScreenTitle from "@/components/ScreenTitle";
 import Button from "@/components/Button";
 import Icon from "@/components/Icon";
+import Banner from "@/components/Banner";
 import Confetti from "@/components/Confetti";
+import PixelArt, { GAMEPAD } from "@/components/PixelArt";
 
 type Props = {
   station: Station;
@@ -26,38 +28,35 @@ export default function AllSet({ station, session, onDone }: Props) {
       <div className="rounded-2xl border border-offwhite/10 bg-surface">
         <div className="flex items-center justify-between border-b border-offwhite/10 p-4">
           <div className="flex items-center gap-3">
-            <Icon name="gamepad" className="size-5 opacity-70" />
+            <Icon name="gamepad" className="size-6 text-purple" />
             <div>
-              <p className="text-[10px] uppercase opacity-60">Your station</p>
-              <p className="text-lg font-black uppercase">
-                {station.name} <span className="text-purple">· {station.code}</span>
+              <p className="text-[10px] tracking-wider text-lilac uppercase">Your station</p>
+              <p className="font-display text-2xl leading-tight uppercase">
+                {station.name} · {station.code}
               </p>
             </div>
           </div>
-          <Icon name="gamepad" className="size-10 text-purple drop-shadow-[0_0_8px_var(--color-purple)]" />
+          <PixelArt rows={GAMEPAD} className="h-10 w-16" glow="var(--color-purple)" />
         </div>
         <dl className="grid grid-cols-2 divide-x divide-offwhite/10 p-4">
           <div className="flex items-center gap-3 pr-3">
-            <Icon name="clock" className="size-5 opacity-70" />
+            <Icon name="clock" className="size-6 text-purple" />
             <div>
-              <dt className="text-[10px] uppercase opacity-60">Playtime</dt>
-              <dd className="font-black">{session.totalMinutes} MIN</dd>
+              <dt className="text-[10px] tracking-wider text-lilac uppercase">Playtime</dt>
+              <dd className="font-display text-lg">{session.totalMinutes} MIN</dd>
             </div>
           </div>
           <div className="flex items-center gap-3 pl-4">
-            <Icon name="card" className="size-5 opacity-70" />
+            <Icon name="coins" className="size-6 text-purple" />
             <div>
-              <dt className="text-[10px] uppercase opacity-60">Total paid</dt>
-              <dd className="font-black">{session.totalPaid} KR</dd>
+              <dt className="text-[10px] tracking-wider text-lilac uppercase">Total paid</dt>
+              <dd className="font-display text-lg">{session.totalPaid} KR</dd>
             </div>
           </div>
         </dl>
       </div>
 
-      <p className="flex items-center gap-3 rounded-2xl border border-offwhite/10 bg-surface p-4 text-xs opacity-80">
-        <Icon name="info" className="size-5 shrink-0" />
-        The timer will start automatically at the gaming station.
-      </p>
+      <Banner title="The timer will start automatically" sub="at the gaming station." />
 
       <Button onClick={onDone} className="mt-auto">
         Got it!

@@ -1,7 +1,9 @@
 import type { Station } from "@/types";
 import Icon from "@/components/Icon";
+import Logo from "@/components/Logo";
+import StatusChip, { type StationStatus } from "@/components/StatusChip";
 
-export type StationStatus = "available" | "active" | "ended";
+export type { StationStatus };
 
 type Props = {
   station: Station;
@@ -10,43 +12,22 @@ type Props = {
   onBack?: () => void;
 };
 
-const STATUS_COLOR: Record<StationStatus, string> = {
-  available: "text-green",
-  active: "text-green",
-  ended: "text-red",
-};
-
 export default function PhoneHeader({ station, status = "available", statusNote, onBack }: Props) {
   return (
     <header className="flex flex-col gap-3">
-      <div className="flex items-center gap-3">
+      <div className="relative flex items-center justify-center">
         {onBack && (
-          <button onClick={onBack} aria-label="Back" className="opacity-80">
-            <Icon name="back" />
+          <button
+            onClick={onBack}
+            aria-label="Back"
+            className="absolute left-0 grid size-10 place-items-center rounded-xl text-purple hover:bg-surface"
+          >
+            <Icon name="back" className="size-6" />
           </button>
         )}
-        {/* Pixel logo mark */}
-        <span aria-hidden="true" className="grid grid-cols-3 gap-0.5">
-          <span className="size-1.5" /> <span className="size-1.5" /> <span className="size-1.5 bg-pink" />
-          <span className="size-1.5" /> <span className="size-1.5 bg-purple" /> <span className="size-1.5 bg-pink" />
-          <span className="size-1.5 bg-purple" /> <span className="size-1.5 bg-pink" /> <span className="size-1.5 bg-purple" />
-        </span>
-        <p className="text-2xl font-black tracking-tight text-pink">GameStreet</p>
+        <Logo size="sm" />
       </div>
-
-      <div className="flex items-center justify-between rounded-full border border-offwhite/10 bg-surface px-4 py-2 text-xs font-bold uppercase">
-        <span className="flex items-center gap-2">
-          <Icon name="gamepad" className="size-4 opacity-70" />
-          {station.name} <span className="text-purple">· {station.code}</span>
-        </span>
-        <span className={`flex flex-col items-end leading-tight ${STATUS_COLOR[status]}`}>
-          <span className="flex items-center gap-1.5">
-            <span className={`size-2 rounded-full ${status === "ended" ? "bg-red" : "bg-green"}`} />
-            {status}
-          </span>
-          {statusNote && <span className="text-[10px] font-medium normal-case opacity-80">{statusNote}</span>}
-        </span>
-      </div>
+      <StatusChip station={station} status={status} note={statusNote} />
     </header>
   );
 }

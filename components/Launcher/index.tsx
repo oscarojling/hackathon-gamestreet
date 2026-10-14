@@ -32,13 +32,13 @@ const MORE: { icon: IconName; title: string; sub: string }[] = [
 
 function Tile({ icon, title, sub }: { icon: IconName; title: string; sub: string }) {
   return (
-    <div className="flex items-center gap-4 rounded-2xl border border-offwhite/10 bg-surface/80 p-5">
-      <Icon name={icon} className="size-9 shrink-0 text-offwhite/80" />
+    <div className="flex items-center gap-4 rounded-2xl border border-offwhite/10 bg-surface/85 p-5 backdrop-blur transition hover:border-purple">
+      <Icon name={icon} className="size-9 shrink-0 text-purple" />
       <span className="flex-1">
-        <span className="block font-black uppercase">{title}</span>
-        <span className="block text-xs opacity-65">{sub}</span>
+        <span className="block font-display text-lg tracking-wide uppercase">{title}</span>
+        <span className="block text-xs text-offwhite/70">{sub}</span>
       </span>
-      <span className="grid size-8 place-items-center rounded-full bg-night">
+      <span className="grid size-9 place-items-center rounded-xl bg-night text-purple">
         <Icon name="arrow" className="size-4" />
       </span>
     </div>
@@ -64,8 +64,8 @@ export default function Launcher({ station, session, onOpenLibrary, onDemoAddTim
       <header className="relative flex items-center justify-between">
         <span className="flex items-center gap-6">
           <Logo />
-          <span className="border-l border-offwhite/15 pl-6 text-sm font-bold uppercase">
-            {station.name} <span className="text-purple">· {station.code}</span>
+          <span className="border-l border-offwhite/15 pl-6 font-display text-lg tracking-wide uppercase">
+            {station.name} · {station.code}
           </span>
         </span>
         <TimeBar remainingMs={remaining} warning={warning} onAddTime={() => setPopupOpen((o) => !o)} />
@@ -82,12 +82,12 @@ export default function Launcher({ station, session, onOpenLibrary, onDemoAddTim
 
       <main className="grid flex-1 grid-cols-[1fr_1.6fr_1fr] gap-5">
         <div className="flex flex-col justify-center text-center">
-          <h1 className="-rotate-3 text-[5.5vw] leading-[0.85] font-black text-yellow uppercase italic [text-shadow:4px_4px_0_var(--color-night),7px_7px_0_var(--color-purple)]">
+          <h1 className="-rotate-3 font-display text-[6vw] leading-[0.85] text-yellow uppercase text-outline [text-shadow:0_0.06em_0_var(--color-purple)]">
             Ready
             <br />
             to play?
           </h1>
-          <p className="mt-6 opacity-75">Pick a game and start playing.</p>
+          <p className="mt-6 text-offwhite/80">Pick a game and start playing.</p>
         </div>
 
         <button
@@ -105,9 +105,9 @@ export default function Launcher({ station, session, onOpenLibrary, onDemoAddTim
           </span>
           <span className="absolute inset-0 bg-gradient-to-t from-night via-night/40 to-transparent" />
           <span className="absolute inset-x-5 bottom-5 flex items-center gap-4 rounded-2xl bg-night/80 p-4 backdrop-blur">
-            <Icon name="gamepad" className="size-8" />
+            <Icon name="gamepad" className="size-9 text-purple" />
             <span className="flex-1">
-              <span className="block text-2xl font-black uppercase">Game library</span>
+              <span className="block font-display text-3xl tracking-wide uppercase">Game library</span>
               <span className="block text-sm opacity-70">Browse and launch games</span>
             </span>
             <span className="grid size-11 place-items-center rounded-full bg-yellow text-night shadow-[0_0_18px_var(--color-yellow)]">
@@ -124,7 +124,7 @@ export default function Launcher({ station, session, onOpenLibrary, onDemoAddTim
       </main>
 
       <section>
-        <p className="mb-3 text-xs font-bold tracking-widest uppercase opacity-60">More at GameStreet</p>
+        <p className="mb-3 font-display text-sm tracking-widest text-lilac uppercase">More at GameStreet</p>
         <div className="grid grid-cols-3 gap-5">
           {MORE.map((tile) => (
             <Tile key={tile.title} {...tile} />

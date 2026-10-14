@@ -13,7 +13,14 @@
   --color-lilac: #c08bfc; /* Soft text, labels */
 }
 
+/* Fonts from next/font (app/layout.tsx): font-display = Lilita One, font-sans = Geist */
+@theme inline {
+  --font-display: var(--font-lilita), ui-rounded, system-ui, sans-serif;
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+}
+
 body {
+  font-family: var(--font-sans);
   background: var(--color-night);
   color: var(--color-offwhite);
 }
@@ -64,6 +71,12 @@ body {
   100% {
     transform: scale(1);
   }
+}
+
+/* Neon text: dark outline + offset shadow, like the logo */
+@utility text-outline {
+  -webkit-text-stroke: 0.12em var(--color-night);
+  paint-order: stroke fill;
 }
 
 @theme {

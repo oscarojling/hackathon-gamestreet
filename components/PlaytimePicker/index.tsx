@@ -27,12 +27,12 @@ export default function PlaytimePicker({ station, selected, onSelect, onContinue
         play?
       </ScreenTitle>
 
-      <OptionList options={playtimeOptions} selected={selected} onSelect={onSelect} />
+      <OptionList variant="tiles" options={playtimeOptions} selected={selected} onSelect={onSelect} />
 
       <div className="mt-auto flex flex-col gap-2">
         <Button onClick={onContinue}>Continue – {selected.price} kr</Button>
-        <p className="flex items-center justify-center gap-1.5 text-xs opacity-60">
-          <Icon name="lock" className="size-3" /> No app. No account. Just play.
+        <p className="flex items-center justify-center gap-1.5 text-xs text-offwhite/60">
+          <Icon name="lock" className="size-3.5" /> No app. No account. Just play.
         </p>
       </div>
     </PhoneScreen>

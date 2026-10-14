@@ -17,7 +17,7 @@ type Props = {
   onAddMore: () => void;
 };
 
-// M5 success: "Time added!"
+// M5 success: "Time added!" – the "Updated session card" from the UX sheet
 export default function TimeAdded({ station, session, addedMinutes, onBackToSession, onAddMore }: Props) {
   const now = useNow();
 
@@ -38,17 +38,15 @@ export default function TimeAdded({ station, session, addedMinutes, onBackToSess
       <InfoRows
         title="Updated session"
         rows={[
-          { icon: "clock", label: "Total playtime", value: `${session.totalMinutes} min` },
-          { icon: "card", label: "Total paid", value: `${session.totalPaid} kr` },
+          { icon: "receipt", label: "Total playtime", value: `${session.totalMinutes} min` },
+          { icon: "coins", label: "Total paid", value: `${session.totalPaid} kr` },
         ]}
-      />
-
-      <div className="mt-auto flex flex-col gap-2">
+      >
         <Button onClick={onBackToSession}>Back to session</Button>
-        <Button variant="outline" onClick={onAddMore}>
+        <Button variant="secondary" onClick={onAddMore}>
           Add more time
         </Button>
-      </div>
+      </InfoRows>
     </PhoneScreen>
   );
 }

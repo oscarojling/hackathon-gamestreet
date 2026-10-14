@@ -35,7 +35,7 @@ export default function InGame({ station, session, onGames, onDemoAddTime }: Pro
         <TimeBar remainingMs={remaining} warning={warning} onAddTime={() => setPopupOpen((o) => !o)}>
           <button
             onClick={onGames}
-            className="flex items-center gap-1.5 rounded-xl border border-offwhite/15 px-4 py-2 text-sm font-black uppercase"
+            className="flex items-center gap-1.5 rounded-xl border-2 border-purple px-4 py-2 font-display tracking-wide text-purple uppercase transition hover:bg-purple/15"
           >
             <Icon name="gamepad" className="size-4" /> Games
           </button>
@@ -46,26 +46,26 @@ export default function InGame({ station, session, onGames, onDemoAddTime }: Pro
         )}
 
         {showToast && (
-          <div className="flex items-center gap-4 rounded-2xl border-2 border-yellow/60 bg-night/90 py-3 pr-3 pl-4 backdrop-blur">
-            <Icon name="info" className="size-6 text-yellow" />
+          <div className="animate-screen-in flex items-center gap-4 rounded-2xl border-2 border-yellow/60 bg-night/90 py-3 pr-3 pl-4 backdrop-blur">
+            <Icon name="warning" className="size-7 text-yellow" />
             <span>
-              <span className="block font-black text-yellow uppercase">
+              <span className="block font-display text-lg tracking-wide text-yellow uppercase">
                 {Math.max(1, Math.ceil(remaining / minuteMs()))} min left
               </span>
               <span className="block text-xs opacity-75">Want to keep playing?</span>
             </span>
             <button
               onClick={() => setPopupOpen(true)}
-              className="rounded-xl bg-yellow px-3 py-2 text-xs font-black text-night uppercase"
+              className="rounded-xl bg-yellow px-3 py-2 font-display text-sm tracking-wide text-night uppercase"
             >
               + Add time
             </button>
             <button
               onClick={() => setToastDismissedAt(session.endsAt)}
               aria-label="Dismiss"
-              className="self-start text-lg leading-none opacity-60"
+              className="self-start text-purple"
             >
-              ×
+              <Icon name="close" className="size-5" />
             </button>
           </div>
         )}

@@ -1,6 +1,7 @@
 "use client";
 
 import StationQR from "@/components/StationQR";
+import Icon from "@/components/Icon";
 
 type Props = {
   code: string;
@@ -8,16 +9,20 @@ type Props = {
   onDemoAddTime: () => void;
 };
 
-// "Add more time?" popup with a QR to the phone flow (used in launcher + in-game)
+// "Add more time?" popup with a QR to the phone flow (dashboard + in-game)
 export default function AddTimePopup({ code, onClose, onDemoAddTime }: Props) {
   return (
-    <div className="relative flex flex-col items-center gap-2 rounded-2xl border border-offwhite/10 bg-night/90 p-5 backdrop-blur">
-      <button onClick={onClose} aria-label="Close" className="absolute top-2 right-3 text-lg opacity-60">
-        ×
+    <div className="animate-screen-in relative flex flex-col items-center gap-2 rounded-2xl border border-offwhite/10 bg-night/95 p-5 backdrop-blur">
+      <button
+        onClick={onClose}
+        aria-label="Close"
+        className="absolute top-2 right-2 grid size-8 place-items-center rounded-lg text-purple hover:bg-surface"
+      >
+        <Icon name="close" className="size-5" />
       </button>
-      <p className="font-black uppercase">Add more time?</p>
-      <StationQR code={code} size={130} />
-      <p className="text-xs font-bold tracking-widest uppercase">Scan to add time</p>
+      <p className="font-display text-xl tracking-wide uppercase">Add more time?</p>
+      <StationQR code={code} size={140} />
+      <p className="font-display text-sm tracking-widest uppercase">Scan to add time</p>
       <DemoButton
         onClick={() => {
           onDemoAddTime();

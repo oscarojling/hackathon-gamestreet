@@ -1,25 +1,62 @@
-import type { ButtonHTMLAttributes } from "react";
-import Icon from "@/components/Icon";
+import type { ButtonHTMLAttributes, ReactNode } from "react";
+import Icon, { type IconName } from "@/components/Icon";
+
+type Variant = "primary" | "secondary" | "destructive" | "link";
 
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "primary" | "outline";
-  arrow?: boolean;
+  variant?: Variant;
+  arrow?: boolean; // arrow after the label
+  icon?: IconName; // icon before the label
+  loading?: boolean;
+  loadingText?: ReactNode;
 };
 
-const VARIANTS = {
+// Button states from the UX component sheet: default, hover, pressed, disabled, loading
+const VARIANTS: Record<Variant, string> = {
   primary:
-    "bg-yellow py-4 text-night shadow-[0_0_24px_color-mix(in_srgb,var(--color-yellow)_60%,transparent)]",
-  outline: "border-2 border-offwhite/30 py-2.5 text-xs text-offwhite",
+    "rounded-xl bg-yellow py-4 text-lg text-night shadow-[0_0_28px_color-mix(in_srgb,var(--color-yellow)_45%,transparent)] hover:brightness-110 active:brightness-90 disabled:bg-yellow/30 disabled:text-night/60 disabled:shadow-none",
+  secondary:
+    "rounded-xl border-2 border-purple bg-night py-3.5 text-purple hover:bg-purple/15 active:bg-purple/25 disabled:border-offwhite/15 disabled:text-offwhite/30",
+  destructive:
+    "rounded-xl border-2 border-red bg-night py-3.5 text-red hover:bg-red/15 active:bg-red/25 disabled:border-offwhite/15 disabled:text-offwhite/30",
+  link: "py-2 text-purple normal-case hover:text-lilac disabled:text-offwhite/30",
 };
 
-export default function Button({ variant = "primary", arrow = true, className = "", children, ...rest }: Props) {
+const LOADING: Partial<Record<Variant, string>> = {
+  primary: "",
+  destructive: "!bg-red !text-offwhite",
+};
+
+export default function Button({
+  variant = "primary",
+  arrow = variant !== "destructive",
+  icon,
+  loading = false,
+  loadingText = "Loading…",
+  className = "",
+  children,
+  disabled,
+  ...rest
+}: Props) {
   return (
     <button
       {...rest}
-      className={`flex w-full items-center justify-center gap-2 rounded-full font-black uppercase transition hover:brightness-110 active:scale-[0.98] disabled:opacity-60 ${VARIANTS[variant]} ${className}`}
+      disabled={disabled || loading}
+      aria-busy={loading || undefined}
+      className={`flex w-full items-center justify-center gap-2 font-display tracking-wide uppercase transition active:scale-[0.98] ${VARIANTS[variant]} ${loading ? `${LOADING[variant] ?? ""} disabled:opacity-100` : ""} ${className}`}
     >
-      {children}
-      {arrow && <Icon name="arrow" className="size-4" />}
+      {loading ? (
+        <>
+          {loadingText}
+          <span className="size-5 animate-spin rounded-full border-2 border-dashed border-current" />
+        </>
+      ) : (
+        <>
+          {icon && <Icon name={icon} className="size-5" />}
+          {children}
+          {arrow && <Icon name="arrow" className="size-5" />}
+        </>
+      )}
     </button>
   );
 }
