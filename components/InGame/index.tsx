@@ -83,9 +83,7 @@ export default function InGame({ station, session, onGames, onDemoAddTime }: Pro
 
         {showToast && (
           <div className="animate-screen-in flex items-start gap-3 rounded-2xl border border-offwhite/10 bg-night/90 py-3 pr-3 pl-4 backdrop-blur">
-            <span className="grid size-8 shrink-0 place-items-center rounded-full border-2 border-yellow text-yellow">
-              <Icon name="clock" className="size-4" />
-            </span>
+            <Icon name="alert" className="size-9 shrink-0 text-yellow" />
             <span className="pr-4">
               <span className="block font-display text-lg tracking-wide text-yellow uppercase">
                 {Math.max(1, Math.ceil(remaining / minuteMs()))} min left

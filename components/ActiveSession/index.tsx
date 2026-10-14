@@ -11,17 +11,20 @@ import Countdown from "@/components/Countdown";
 import InfoRows from "@/components/InfoRows";
 import Button from "@/components/Button";
 import Icon from "@/components/Icon";
+import Alert from "@/components/Alert";
+import Confetti from "@/components/Confetti";
 
 type Props = {
   station: Station;
   session: Session;
   addedMinutes?: number; // shows "+30 min added" after an extension
+  justPaid?: boolean; // show "Payment successful!" for a few seconds
   onAddTime: () => void;
   onEnd: () => void; // "End session" or time ran out
 };
 
 // M4: "Your session" with live countdown (turns red in the last 5 min)
-export default function ActiveSession({ station, session, addedMinutes, onAddTime, onEnd }: Props) {
+export default function ActiveSession({ station, session, addedMinutes, justPaid, onAddTime, onEnd }: Props) {
   const now = useNow();
   const remaining = session.endsAt - now;
   const urgent = remaining <= URGENT_MINUTES * minuteMs();
@@ -32,6 +35,12 @@ export default function ActiveSession({ station, session, addedMinutes, onAddTim
 
   return (
     <PhoneScreen station={station} status="active">
+      {justPaid && (
+        <>
+          {!addedMinutes && <Confetti />}
+          <Alert tone="success" title="Payment successful!" autoHideMs={3500} />
+        </>
+      )}
       {!urgent && (
         <ScreenTitle>
           Your

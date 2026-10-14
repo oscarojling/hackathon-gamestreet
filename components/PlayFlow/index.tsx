@@ -17,12 +17,11 @@ import {
 import { playtimeOptions } from "@/data/playtimeOptions";
 import PlaytimePicker from "@/components/PlaytimePicker";
 import Checkout, { type PayMethod } from "@/components/Checkout";
-import AllSet from "@/components/AllSet";
 import ActiveSession from "@/components/ActiveSession";
 import AddTime from "@/components/AddTime";
 import SessionEnded, { type SessionSummary } from "@/components/SessionEnded";
 
-type Step = "pick" | "checkout" | "success" | "active" | "addTime" | "extendCheckout" | "ended";
+type Step = "pick" | "checkout" | "active" | "addTime" | "extendCheckout" | "ended";
 
 // The phone flow (UX "Flow desktop + mobile"):
 // M1 pick → M2 pay → M3 all set → M4 session → M5 add time → M2 pay → M4 (+30 min added) → M6 ended
@@ -33,6 +32,7 @@ export default function PlayFlow({ station }: { station: Station }) {
   const [method, setMethod] = useState<PayMethod>("swish");
   const [session, setSession] = useState<Session | null>(null);
   const [addedMinutes, setAddedMinutes] = useState(0);
+  const [justPaid, setJustPaid] = useState(false);
   const [summary, setSummary] = useState<SessionSummary | null>(null);
 
   // Refresh-safe: if this station already has a running session, jump straight to it
@@ -109,19 +109,22 @@ export default function PlayFlow({ station }: { station: Station }) {
         onPaid={(paidWith) => {
           setMethod(paidWith);
           setSession(startSession(station.code, selectedOption.minutes, selectedOption.price));
-          setStep("success");
+          setJustPaid(true);
+          setStep("active");
         }}
       />
     );
-  } else if (step === "success" && session) {
-    screen = <AllSet station={station} session={session} onDone={() => setStep("active")} />;
   } else if (step === "active" && session) {
     screen = (
       <ActiveSession
         station={station}
         session={session}
         addedMinutes={addedMinutes}
-        onAddTime={() => setStep("addTime")}
+        justPaid={justPaid}
+        onAddTime={() => {
+          setJustPaid(false);
+          setStep("addTime");
+        }}
         onEnd={finish}
       />
     );
@@ -150,6 +153,7 @@ export default function PlayFlow({ station }: { station: Station }) {
           const updated = extendSession(station.code, extraOption.minutes, extraOption.price);
           if (updated) setSession(updated);
           setAddedMinutes(extraOption.minutes);
+          setJustPaid(true);
           setStep("active");
         }}
       />
