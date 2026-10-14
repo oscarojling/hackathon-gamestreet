@@ -32,7 +32,20 @@ const PATHS = {
 
 export type IconName = keyof typeof PATHS;
 
+// Icons the designers drew (public/icons/*.png, cut from the UX asset sheet).
+// They are lilac; when a component asks for a status colour (red/yellow/green/dark),
+// the code-drawn SVG is used instead so the colour can still change.
+const ASSETS = new Set<IconName>([
+  "gamepad", "clock", "coins", "card", "mail", "trophy", "lock", "info", "hourglass",
+  "calendar", "globe", "headphones", "food", "help", "noAccount", "crown",
+]);
+const TINTED = /text-(red|yellow|green|night|offwhite|pink)/;
+
 export default function Icon({ name, className = "size-5" }: { name: IconName; className?: string }) {
+  if (ASSETS.has(name) && !TINTED.test(className)) {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={`/icons/${name}.png`} alt="" aria-hidden="true" className={`${className} object-contain`} />;
+  }
   return (
     <svg
       viewBox="0 0 24 24"
