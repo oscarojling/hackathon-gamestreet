@@ -27,7 +27,7 @@ export default function PlaytimePicker({ station, selected, onSelect, onContinue
         play?
       </ScreenTitle>
 
-      <OptionList variant="tiles" options={playtimeOptions} selected={selected} onSelect={onSelect} />
+      <OptionList options={playtimeOptions} selected={selected} onSelect={onSelect} />
 
       <div className="mt-auto flex flex-col gap-2">
         <Button onClick={onContinue}>Continue – {selected.price} kr</Button>

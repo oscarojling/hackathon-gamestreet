@@ -7,6 +7,10 @@ import {
   extendSession,
   getSession,
   isActive,
+  resetAllSessions,
+  resetFromUrl,
+  setRemaining,
+  minuteMs,
   startSession,
   subscribe,
   type Session,
@@ -18,6 +22,7 @@ import Launcher from "@/components/Launcher";
 import { DemoButton } from "@/components/AddTimePopup";
 import GameOver from "@/components/GameOver";
 import Backdrop from "@/components/Backdrop";
+import DemoControls, { SKIPS, skipMs } from "@/components/DemoControls";
 
 // The PC screen: QR (available) → launcher → in-game → game over → QR again
 export default function StationFlow({ station }: { station: Station }) {
@@ -29,7 +34,7 @@ export default function StationFlow({ station }: { station: Station }) {
   // Pick up an existing session, and listen for payments from the phone
   // (works when phone + PC are tabs in the same browser, e.g. in the demo)
   useEffect(() => {
-    const existing = getSession(station.code);
+    const existing = resetFromUrl() ? null : getSession(station.code); // ?reset → back to the QR screen
     if (isActive(existing)) setSession(existing);
 
     return subscribe(station.code, (next) => {
@@ -53,7 +58,7 @@ export default function StationFlow({ station }: { station: Station }) {
 
   const playing = !!session && session.endsAt > now;
 
-  // Demo shortcuts: P = pay, T = +30 min, G = games/dashboard, E = end session
+  // Demo shortcuts: P = pay, T = +30 min, G = games/dashboard, E = end session, R = reset to start, F = fast-forward
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.metaKey || e.ctrlKey || e.altKey || e.target instanceof HTMLInputElement) return;
@@ -66,6 +71,16 @@ export default function StationFlow({ station }: { station: Station }) {
         setSession(extendSession(station.code, 30, 50));
       } else if (key === "g" && playing) {
         setView((v) => (v === "launcher" ? "game" : "launcher"));
+      } else if (key === "f" && playing && session) {
+        // Jump to the next step that is shorter than what's left now
+        const left = session.endsAt - Date.now();
+        const next = SKIPS.map((s) => skipMs(s.minutes)).find((ms) => ms < left - minuteMs() / 2);
+        if (next !== undefined) setSession(setRemaining(station.code, next));
+      } else if (key === "r") {
+        resetAllSessions();
+        setSession(null);
+        setOver(false);
+        setView("launcher");
       } else if (key === "e" && playing) {
         endSession(station.code);
         setSession(null);
@@ -74,14 +89,14 @@ export default function StationFlow({ station }: { station: Station }) {
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [playing, station.code]);
+  }, [playing, session, station.code]);
 
   // Which screen is showing – used as a key so each change animates in
   const screenKey = playing ? view : over ? "over" : "welcome";
 
   return (
     <div className="relative isolate h-dvh w-full overflow-hidden">
-      <Backdrop variant={(playing && view === "game") || over ? "game" : playing ? "panel" : "lounge"} />
+      <Backdrop variant={(playing && view === "game") || over ? "game" : playing ? "panel" : "lounge"} dim={over && !playing} />
       <div key={screenKey} className="h-full motion-safe:animate-screen-in">
       {playing && session && view === "launcher" ? (
         <Launcher
@@ -116,6 +131,7 @@ export default function StationFlow({ station }: { station: Station }) {
         </>
       )}
       </div>
+      {playing && <DemoControls onSkip={(ms) => setSession(setRemaining(station.code, ms))} />}
     </div>
   );
 }

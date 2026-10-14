@@ -8,6 +8,7 @@ import {
   getSession,
   isActive,
   minuteMs,
+  resetFromUrl,
   startSession,
   type Session,
 } from "@/lib/session";
@@ -17,15 +18,16 @@ import Checkout, { type PayMethod } from "@/components/Checkout";
 import AllSet from "@/components/AllSet";
 import ActiveSession from "@/components/ActiveSession";
 import AddTime from "@/components/AddTime";
-import TimeAdded from "@/components/TimeAdded";
 import SessionEnded, { type SessionSummary } from "@/components/SessionEnded";
 
-type Step = "pick" | "checkout" | "success" | "active" | "addTime" | "timeAdded" | "ended";
+type Step = "pick" | "checkout" | "success" | "active" | "addTime" | "extendCheckout" | "ended";
 
-// The phone flow: M1 pick → M2 pay → M3 all set → M4 session → M5 add time → M6 ended
+// The phone flow (UX "Flow desktop + mobile"):
+// M1 pick → M2 pay → M3 all set → M4 session → M5 add time → M2 pay → M4 (+30 min added) → M6 ended
 export default function PlayFlow({ station }: { station: Station }) {
   const [step, setStep] = useState<Step>("pick");
   const [selectedOption, setSelectedOption] = useState<PlaytimeOption>(playtimeOptions[1]); // 60 min = popular
+  const [extraOption, setExtraOption] = useState<PlaytimeOption>(playtimeOptions[0]);
   const [method, setMethod] = useState<PayMethod>("swish");
   const [session, setSession] = useState<Session | null>(null);
   const [addedMinutes, setAddedMinutes] = useState(0);
@@ -33,6 +35,7 @@ export default function PlayFlow({ station }: { station: Station }) {
 
   // Refresh-safe: if this station already has a running session, jump straight to it
   useEffect(() => {
+    if (resetFromUrl()) return; // ?reset → start from M1
     const existing = getSession(station.code);
     if (isActive(existing)) {
       setSession(existing);
@@ -53,6 +56,7 @@ export default function PlayFlow({ station }: { station: Station }) {
     });
     endSession(station.code);
     setSession(null);
+    setAddedMinutes(0);
     setStep("ended");
   }, [session, station.code, method]);
 
@@ -72,6 +76,7 @@ export default function PlayFlow({ station }: { station: Station }) {
       <Checkout
         station={station}
         option={selectedOption}
+        initialMethod={method}
         onBack={() => setStep("pick")}
         onPaid={(paidWith) => {
           setMethod(paidWith);
@@ -87,6 +92,7 @@ export default function PlayFlow({ station }: { station: Station }) {
       <ActiveSession
         station={station}
         session={session}
+        addedMinutes={addedMinutes}
         onAddTime={() => setStep("addTime")}
         onEnd={finish}
       />
@@ -96,24 +102,28 @@ export default function PlayFlow({ station }: { station: Station }) {
       <AddTime
         station={station}
         session={session}
-        method={method}
         onBack={() => setStep("active")}
-        onPaid={(option) => {
-          const updated = extendSession(station.code, option.minutes, option.price);
-          if (updated) setSession(updated);
-          setAddedMinutes(option.minutes);
-          setStep("timeAdded");
+        onContinue={(option) => {
+          setExtraOption(option);
+          setStep("extendCheckout");
         }}
       />
     );
-  } else if (step === "timeAdded" && session) {
+  } else if (step === "extendCheckout" && session) {
     screen = (
-      <TimeAdded
+      <Checkout
         station={station}
-        session={session}
-        addedMinutes={addedMinutes}
-        onBackToSession={() => setStep("active")}
-        onAddMore={() => setStep("addTime")}
+        option={extraOption}
+        mode="extend"
+        initialMethod={method}
+        onBack={() => setStep("addTime")}
+        onPaid={(paidWith) => {
+          setMethod(paidWith);
+          const updated = extendSession(station.code, extraOption.minutes, extraOption.price);
+          if (updated) setSession(updated);
+          setAddedMinutes(extraOption.minutes);
+          setStep("active");
+        }}
       />
     );
   } else if (step === "ended" && summary) {

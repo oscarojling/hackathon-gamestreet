@@ -6,25 +6,28 @@ import Icon from "@/components/Icon";
 
 type Props = {
   remainingMs: number;
-  warning: boolean;
+  warning: boolean; // last 5 min: red
   onAddTime: () => void;
   addLabel?: string; // "Time" in-game, "Add time" on the dashboard
+  compact?: boolean; // in-game: no "Time left" label
   children?: ReactNode; // extra buttons, e.g. "Games"
 };
 
-// Timer + "+ Time" pill, shown on the dashboard and in-game
-export default function TimeBar({ remainingMs, warning, onAddTime, addLabel = "Time", children }: Props) {
+// Timer + "+ Time" button, shown on the dashboard and in-game
+export default function TimeBar({ remainingMs, warning, onAddTime, addLabel = "Time", compact, children }: Props) {
   return (
     <div
-      className={`flex items-center gap-2 rounded-2xl border bg-night/85 p-2 backdrop-blur ${
-        warning ? "border-pink/60 shadow-[0_0_20px_color-mix(in_srgb,var(--color-pink)_40%,transparent)]" : "border-offwhite/10"
+      className={`flex items-center gap-2 rounded-2xl border bg-night/90 p-2 backdrop-blur ${
+        warning ? "border-red/70 shadow-[0_0_20px_color-mix(in_srgb,var(--color-red)_40%,transparent)]" : "border-offwhite/10"
       }`}
     >
       <span className="flex items-center gap-2.5 px-3" role="timer">
-        <Icon name="clock" className={`size-7 ${warning ? "text-pink" : "text-purple"}`} />
+        <Icon name="clock" className={`size-7 ${warning ? "text-red" : "text-purple"}`} />
         <span className="leading-none">
-          <span className="block font-display text-[10px] tracking-[0.2em] text-lilac uppercase">Time left</span>
-          <span className={`font-display text-3xl tabular-nums ${warning ? "text-pink" : ""}`}>
+          {!compact && (
+            <span className="block font-display text-[10px] tracking-[0.2em] text-lilac uppercase">Time left</span>
+          )}
+          <span className={`font-display text-3xl tabular-nums ${warning ? "text-red" : ""}`}>
             {formatDuration(remainingMs)}
           </span>
         </span>

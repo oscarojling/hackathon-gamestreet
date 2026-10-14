@@ -122,7 +122,7 @@ export default function Launcher({ station, session, onOpenLibrary, onDemoAddTim
             <h1 className="-rotate-6 font-display text-[6.5vw] leading-[0.85] text-yellow uppercase text-outline [text-shadow:0_0.06em_0_var(--color-purple)]">
               Ready
               <br />
-              to play?
+              <span className="text-lilac">to play?</span>
             </h1>
             <SpeedMarks className="absolute -right-10 bottom-0 size-12" direction="right" />
           </div>

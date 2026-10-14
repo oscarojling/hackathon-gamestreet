@@ -33,12 +33,12 @@ export default function InGame({ station, session, onGames, onDemoAddTime }: Pro
   return (
     <div className="relative h-full">
       <div className="absolute top-6 right-6 flex flex-col items-end gap-3">
-        <TimeBar remainingMs={remaining} warning={urgent} onAddTime={() => setPopupOpen((o) => !o)}>
+        <TimeBar compact remainingMs={remaining} warning={urgent} onAddTime={() => setPopupOpen((o) => !o)}>
           <button
             onClick={onGames}
-            className="flex items-center gap-1.5 rounded-xl border-2 border-purple px-4 py-2 font-display tracking-wide text-purple uppercase transition hover:bg-purple/15"
+            className="flex items-center gap-1.5 rounded-xl bg-surface px-4 py-2.5 font-display tracking-wide uppercase transition hover:bg-purple"
           >
-            <Icon name="gamepad" className="size-4" /> Games
+            <Icon name="gamepad" className="size-5 text-lilac" /> Games
           </button>
         </TimeBar>
 
