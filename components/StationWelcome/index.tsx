@@ -1,8 +1,8 @@
+import { Fragment } from "react";
 import type { Station } from "@/types";
 import { playtimeOptions } from "@/data/playtimeOptions";
 import Logo from "@/components/Logo";
 import StationQR from "@/components/StationQR";
-import StatusChip from "@/components/StatusChip";
 import SpeedMarks from "@/components/SpeedMarks";
 import Icon, { type IconName } from "@/components/Icon";
 
@@ -10,7 +10,7 @@ const STEPS = [
   { title: "Scan", sub: "the QR code" },
   { title: "Choose time", sub: "on your phone" },
   { title: "Pay", sub: "with Swish or card" },
-  { title: "Play", sub: "This PC unlocks automatically" },
+  { title: "Play", sub: "This PC unlocks\nautomatically" },
 ];
 
 const INFO: { icon: IconName; title: string; sub: string }[] = [
@@ -19,65 +19,99 @@ const INFO: { icon: IconName; title: string; sub: string }[] = [
   { icon: "info", title: "No phone?", sub: "Ask at reception." },
 ];
 
-// PC screen 1: available + QR ("Game on?")
+// Big station chip shown above the QR ("Station · Glitch · 07 · Available / Paying")
+function StationChip({ station, paying }: { station: Station; paying: boolean }) {
+  return (
+    <div className="flex items-center gap-5 rounded-2xl border border-offwhite/10 bg-surface/90 px-6 py-4 backdrop-blur">
+      <Icon name="gamepad" className="size-11" />
+      <span className="leading-none">
+        <span className="block text-[13px] font-semibold tracking-[0.15em] text-lilac uppercase">Station</span>
+        <span className="mt-1.5 block font-display text-[32px] tracking-wide uppercase">
+          {station.name} <span className="text-purple">· {station.code}</span>
+        </span>
+      </span>
+      <span
+        className={`ml-2 flex items-center gap-2 font-display text-[18px] tracking-wide uppercase ${
+          paying ? "text-yellow" : "text-green"
+        }`}
+      >
+        <span
+          className={`size-3 rounded-full ${
+            paying ? "animate-pulse bg-yellow shadow-[0_0_8px_var(--color-yellow)]" : "bg-green shadow-[0_0_8px_var(--color-green)]"
+          }`}
+        />
+        {paying ? "Paying" : "Available"}
+      </span>
+    </div>
+  );
+}
+
+// PC screen 1 (1440×900 canvas): "Game on?" + QR
 export default function StationWelcome({ station, paying = false }: { station: Station; paying?: boolean }) {
   const cheapest = playtimeOptions[0];
 
   return (
-    <div className="flex h-full flex-col px-[5vw] py-[4vh]">
-      <header className="flex items-center">
-        <Logo />
-      </header>
-
-      <main className="grid flex-1 grid-cols-2 items-center gap-[4vw]">
-        <div className="text-center">
-          <div className="relative inline-block">
-            <SpeedMarks className="absolute top-1/2 -left-[10%] size-[5vw]" direction="left" />
-            <h1 className="-rotate-3 font-display text-[10vw] leading-[0.85] uppercase text-outline [text-shadow:0_0.06em_0_var(--color-purple)]">
-              <span className="block text-yellow">Game</span>
-              <span className="block text-lilac">on?</span>
-            </h1>
-            <SpeedMarks className="absolute top-1/2 -right-[12%] size-[5vw]" direction="right" />
+    <div className="flex h-full flex-col px-[64px] pt-[52px] pb-[36px]">
+      <div className="grid flex-1 grid-cols-2 gap-10">
+        {/* Left: logo + Game on? */}
+        <div className="flex flex-col">
+          <Logo />
+          <div className="flex flex-1 flex-col items-center justify-center pb-6">
+            <div className="relative -rotate-[7deg] text-center font-display uppercase leading-[0.82]">
+              <span className="block text-[156px] text-yellow [text-shadow:0_8px_0_rgba(8,14,38,0.55)]">Game</span>
+              <span className="relative inline-block text-[156px] text-lilac [text-shadow:0_8px_0_rgba(8,14,38,0.55)]">
+                <SpeedMarks className="absolute top-1/2 -left-[76px] size-[72px] -translate-y-1/2" direction="left" />
+                On?
+                <SpeedMarks className="absolute top-1/2 -right-[76px] size-[72px] -translate-y-1/2" direction="right" />
+              </span>
+            </div>
+            <p className="mt-14 rounded-full bg-yellow px-9 py-3.5 font-display text-[30px] tracking-wide text-night uppercase shadow-[0_5px_0_#b88f0f]">
+              From {cheapest.price} kr / {cheapest.minutes} min
+            </p>
           </div>
-          <p className="mt-8 inline-block rounded-xl bg-yellow px-8 py-3 font-display text-2xl tracking-wide text-night uppercase shadow-[0_0_30px_color-mix(in_srgb,var(--color-yellow)_45%,transparent)]">
-            From {cheapest.price} kr / {cheapest.minutes} min
-          </p>
         </div>
 
-        <div className="flex flex-col items-center gap-3">
-          <div className="mb-3 w-[min(420px,100%)]">
-            <StatusChip station={station} status={paying ? "paying" : "available"} size="lg" />
+        {/* Right: chip centred over the QR */}
+        <div className="flex flex-col items-center">
+          <StationChip station={station} paying={paying} />
+          <div className="mt-10">
+            <StationQR code={station.code} size={256} waiting={paying} />
           </div>
-          <StationQR code={station.code} size={240} waiting={paying} />
-          <p className="font-display text-4xl tracking-wide uppercase">Scan to play</p>
-          <p className="text-offwhite/80">Choose your time. Pay. Start playing.</p>
+          <p className="mt-6 font-display text-[54px] leading-none tracking-wide uppercase">Scan to play</p>
+          <p className="mt-3 text-[22px] font-semibold text-lilac">Choose your time. Pay. Start playing.</p>
         </div>
-      </main>
+      </div>
 
-      <ol className="flex w-full items-center justify-center gap-6">
+      {/* Steps */}
+      <ol className="mt-8 flex items-center justify-between">
         {STEPS.map((step, i) => (
-          <li key={step.title} className="flex items-center gap-6">
-            <span className="flex items-center gap-3">
-              <span className="grid size-11 place-items-center rounded-full bg-purple font-display text-xl shadow-[0_0_14px_var(--color-purple)]">
+          <Fragment key={step.title}>
+            <li className="flex items-center gap-4">
+              <span className="grid size-[46px] place-items-center rounded-full bg-purple font-display text-[22px] shadow-[0_0_14px_var(--color-purple)]">
                 {i + 1}
               </span>
-              <span>
-                <span className="block font-display text-lg tracking-wide uppercase">{step.title}</span>
-                <span className="block max-w-36 text-xs text-offwhite/70">{step.sub}</span>
+              <span className="leading-tight">
+                <span className="block font-display text-[22px] tracking-wide uppercase">{step.title}</span>
+                <span className="block text-[16px] whitespace-pre-line text-offwhite/75">{step.sub}</span>
               </span>
-            </span>
-            {i < STEPS.length - 1 && <Icon name="arrow" className="size-6 text-purple" />}
-          </li>
+            </li>
+            {i < STEPS.length - 1 && (
+              <li aria-hidden="true">
+                <Icon name="arrow" className="size-7 text-purple" />
+              </li>
+            )}
+          </Fragment>
         ))}
       </ol>
 
-      <ul className="mt-6 flex self-center divide-x divide-offwhite/15 rounded-2xl border border-offwhite/10 bg-surface/80 py-4 backdrop-blur">
-        {INFO.map((item) => (
-          <li key={item.title} className="flex items-center gap-3 px-8">
-            <Icon name={item.icon} className="size-7 text-purple" />
-            <span className="text-sm">
-              <span className="block font-semibold">{item.title}</span>
-              <span className="block text-offwhite/70">{item.sub}</span>
+      {/* Info row */}
+      <ul className="mt-6 grid grid-cols-3 border-t border-offwhite/15 pt-6">
+        {INFO.map((item, i) => (
+          <li key={item.title} className={`flex items-center gap-4 px-6 ${i > 0 ? "border-l border-offwhite/15" : ""}`}>
+            <Icon name={item.icon} className="size-11 shrink-0" />
+            <span className="leading-snug">
+              <span className="block text-[17px] font-semibold">{item.title}</span>
+              <span className="block text-[16px] text-lilac">{item.sub}</span>
             </span>
           </li>
         ))}

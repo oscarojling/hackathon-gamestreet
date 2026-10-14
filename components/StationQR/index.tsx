@@ -23,11 +23,11 @@ export default function StationQR({ code, size = 200, waiting = false }: Props) 
   return (
     <div className="relative p-3">
       {/* Neon corner brackets */}
-      <span aria-hidden="true" className="absolute top-0 left-0 size-8 rounded-tl-xl border-t-4 border-l-4 border-pink" />
-      <span aria-hidden="true" className="absolute top-0 right-0 size-8 rounded-tr-xl border-t-4 border-r-4 border-pink" />
-      <span aria-hidden="true" className="absolute bottom-0 left-0 size-8 rounded-bl-xl border-b-4 border-l-4 border-pink" />
-      <span aria-hidden="true" className="absolute right-0 bottom-0 size-8 rounded-br-xl border-r-4 border-b-4 border-pink" />
-      <div className="relative rounded-xl bg-offwhite p-3" style={{ width: size + 24, height: size + 24 }}>
+      <span aria-hidden="true" className="absolute top-0 left-0 size-8 rounded-tl-xl border-t-4 border-l-4 border-purple" />
+      <span aria-hidden="true" className="absolute top-0 right-0 size-8 rounded-tr-xl border-t-4 border-r-4 border-purple" />
+      <span aria-hidden="true" className="absolute bottom-0 left-0 size-8 rounded-bl-xl border-b-4 border-l-4 border-purple" />
+      <span aria-hidden="true" className="absolute right-0 bottom-0 size-8 rounded-br-xl border-r-4 border-b-4 border-purple" />
+      <div className="relative rounded-2xl bg-offwhite p-3" style={{ width: size + 24, height: size + 24 }}>
         {waiting && (
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 rounded-xl bg-offwhite/90 text-center text-night">
             <span className="size-10 animate-spin rounded-full border-4 border-night/15 border-t-yellow" />

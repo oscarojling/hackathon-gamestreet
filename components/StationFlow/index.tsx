@@ -25,6 +25,7 @@ import { DemoButton } from "@/components/AddTimePopup";
 import GameOver from "@/components/GameOver";
 import Backdrop from "@/components/Backdrop";
 import Unlocking from "@/components/Unlocking";
+import Stage from "@/components/Stage";
 import DemoControls, { SKIPS, skipMs } from "@/components/DemoControls";
 
 // The PC screen: QR (available) → launcher → in-game → game over → QR again
@@ -116,7 +117,8 @@ export default function StationFlow({ station }: { station: Station }) {
   const screenKey = playing ? (unlocking ? "unlocking" : view) : over ? "over" : "welcome";
 
   return (
-    <div className="relative isolate h-dvh w-full overflow-hidden">
+    <Stage>
+    <div className="relative isolate h-full w-full overflow-hidden">
       <Backdrop variant={(playing && view === "game") || over ? "game" : "lounge"} dim={over && !playing} />
       <div key={screenKey} className="h-full motion-safe:animate-screen-in">
       {playing && unlocking ? (
@@ -156,5 +158,6 @@ export default function StationFlow({ station }: { station: Station }) {
       </div>
       {playing && <DemoControls onSkip={(ms) => setSession(setRemaining(station.code, ms))} />}
     </div>
+    </Stage>
   );
 }
