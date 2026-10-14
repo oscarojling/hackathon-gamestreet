@@ -136,15 +136,8 @@ export default function Launcher({ station, session, onOpenLibrary, onDemoAddTim
       {/* Main */}
       <main className="mt-[40px] grid h-[424px] grid-cols-[368px_1fr_336px] gap-[26px]">
         <div className="flex flex-col items-center justify-center">
-          <div className="relative -rotate-[7deg] text-center font-display leading-[0.85] uppercase [text-shadow:0_6px_0_rgba(8,14,38,0.55)]">
-            <span className="block text-[78px] text-yellow">Ready</span>
-            <span className="relative block text-[78px] whitespace-nowrap">
-              <SpeedMarks className="absolute top-1/2 -left-10 size-9 -translate-y-1/2" direction="left" />
-              <span className="text-yellow">To </span>
-              <span className="text-lilac">play?</span>
-              <SpeedMarks className="absolute top-1/2 -right-10 size-9 -translate-y-1/2" direction="right" />
-            </span>
-          </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/titles/ready-to-play.png" alt="Ready to play?" className="w-[340px]" />
           <p className="mt-12 text-[23px] text-offwhite/85">Pick a game and start playing.</p>
         </div>
 

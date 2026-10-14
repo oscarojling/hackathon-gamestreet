@@ -19,13 +19,7 @@ type Props = {
 export default function PlaytimePicker({ station, selected, onSelect, onContinue }: Props) {
   return (
     <PhoneScreen station={station} status="available">
-      <ScreenTitle sub="Choose your playtime.">
-        How long
-        <br />
-        <span className="text-lilac">will you</span>
-        <br />
-        play?
-      </ScreenTitle>
+      <ScreenTitle sub="Choose your playtime." image="how-long" alt="How long will you play?" height={120} />
 
       <OptionList options={playtimeOptions} selected={selected} onSelect={onSelect} />
 

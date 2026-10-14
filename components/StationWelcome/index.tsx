@@ -57,14 +57,8 @@ export default function StationWelcome({ station, paying = false }: { station: S
         <div className="flex flex-col">
           <Logo />
           <div className="flex flex-1 flex-col items-center justify-center pb-6">
-            <div className="relative -rotate-[7deg] text-center font-display uppercase leading-[0.82]">
-              <span className="block text-[156px] text-yellow [text-shadow:0_8px_0_rgba(8,14,38,0.55)]">Game</span>
-              <span className="relative inline-block text-[156px] text-lilac [text-shadow:0_8px_0_rgba(8,14,38,0.55)]">
-                <SpeedMarks className="absolute top-1/2 -left-[76px] size-[72px] -translate-y-1/2" direction="left" />
-                On?
-                <SpeedMarks className="absolute top-1/2 -right-[76px] size-[72px] -translate-y-1/2" direction="right" />
-              </span>
-            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/titles/game-on.png" alt="Game on?" className="h-[300px] w-auto" />
             <p className="mt-14 rounded-full bg-yellow px-9 py-3.5 font-display text-[30px] tracking-wide text-night uppercase shadow-[0_5px_0_#b88f0f]">
               From {cheapest.price} kr / {cheapest.minutes} min
             </p>

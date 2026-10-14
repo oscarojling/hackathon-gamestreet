@@ -40,9 +40,22 @@ const ASSETS = new Set<IconName>([
   "gamepad", "clock", "coins", "card", "mail", "trophy", "lock", "info", "hourglass",
   "calendar", "globe", "headphones", "food", "help", "noAccount", "crown",
 ]);
+// Stroke icons from the UX sheet used as a mask, so they take the surrounding text colour
+// (dark on yellow buttons, white on tiles, lilac in headers).
+const MASKED = new Set<IconName>(["arrow", "back", "plus", "close"]);
 const TINTED = /text-(red|yellow|green|night|offwhite|pink)/;
 
 export default function Icon({ name, className = "size-5" }: { name: IconName; className?: string }) {
+  if (MASKED.has(name)) {
+    const url = `url(/icons/${name}.png)`;
+    return (
+      <span
+        aria-hidden="true"
+        className={`inline-block shrink-0 bg-current ${className}`}
+        style={{ maskImage: url, WebkitMaskImage: url, maskSize: "contain", WebkitMaskSize: "contain", maskRepeat: "no-repeat", WebkitMaskRepeat: "no-repeat", maskPosition: "center", WebkitMaskPosition: "center" }}
+      />
+    );
+  }
   if (ASSETS.has(name) && !TINTED.test(className)) {
     // eslint-disable-next-line @next/next/no-img-element
     return <img src={`/icons/${name}.png`} alt="" aria-hidden="true" className={`${className} object-contain`} />;

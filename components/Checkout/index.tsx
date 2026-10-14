@@ -55,13 +55,7 @@ export default function Checkout({ station, option, mode = "start", initialMetho
 
   return (
     <PhoneScreen station={station} status={mode === "start" ? "available" : "active"} onBack={processing ? undefined : onBack}>
-      <ScreenTitle kicker="Payment" sub="How would you like to pay?">
-        Choose
-        <br />
-        <span className="text-offwhite">payment</span>
-        <br />
-        method
-      </ScreenTitle>
+      <ScreenTitle kicker="Payment" sub="How would you like to pay?" image="choose-payment" alt="Choose payment method" height={112} />
 
       <dl className="grid grid-cols-2 divide-x divide-offwhite/10 rounded-2xl border border-offwhite/10 bg-surface p-4">
         <div className="flex items-center gap-3 pr-3">

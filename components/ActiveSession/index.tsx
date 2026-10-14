@@ -42,11 +42,7 @@ export default function ActiveSession({ station, session, addedMinutes, justPaid
         </>
       )}
       {!urgent && (
-        <ScreenTitle>
-          Your
-          <br />
-          <span className="text-lilac">session</span>
-        </ScreenTitle>
+        <ScreenTitle image="your-session" alt="Your session" height={92} />
       )}
 
       <div className="flex flex-col gap-2">
